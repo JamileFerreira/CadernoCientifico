@@ -71,11 +71,17 @@ public class Inicio extends AppCompatActivity {
             // imagem.setImageBitmap(thumbnail);
             Intent intent2=new Intent(this, MainActivity.class);
             Bundle bundle = new Bundle();
-            String ident="Inicio";
+            //String ident="Inicio";
             bundle.putString("DEUS", picturePath);
            // bundle.putString("Inicio", ident);
             intent2.putExtras(bundle);
             startActivity(intent2);
+
+
+
+
+
+
             //imagem.setImageBitmap(thumbnail);
 //
 //            Intent intent2=new Intent(this, ReceberFoto.class);

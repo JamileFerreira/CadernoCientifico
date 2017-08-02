@@ -1,16 +1,22 @@
 package com.example.jamile.cadernocientifico14;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import java.io.File;
 import java.util.Vector;
 
 /**
@@ -38,10 +44,10 @@ public class MoverView extends View {
     private final  int PERMISSAO_REQUEST =2;
     View view;
 
-    float[] x = {50, 50,50,50, 50,50,50, 50,50,50, 50,50,50, 50,50,50, 50,50,50, 50,50,50, 50,50};
-    float[] y = {130, 130,130,130, 130,130,130, 130,130,130, 130,130,130, 130,130,130, 130,130};
+    Vector <Float> x=new Vector <Float> ();
+    Vector <Float>  y=new Vector<Float>  ();
     //float[] radio = {50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50};
-    float[] radio = {20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20};
+    final float RADIO = 30;
     Vector paint = new  Vector();
     //Paint paint[] = new Paint[2];
     Paint p,p2,p3,p4;
@@ -51,53 +57,78 @@ public class MoverView extends View {
     int circulo = -1;
     String txt = "Mueve Algun circulo";
     Drawable imagen;
+    static  Ponto ponto;
+    static Vector <Ponto> pontos=new Vector<Ponto>();
     public MoverView(Context context) {
         super(context);
     }
 
-    void criarPonto(int tipo){
+    void criarPonto(int tipo, String caminhoLink){
+
         if(tipo==PDF){
             Paint p= new Paint();
             p.setAntiAlias(true);
             p.setColor(Color.RED);
-            paint.add(p);
+            paint.add(p);/////////
+            ponto=new Ponto();
+            ponto.setForma(p);
+            ponto.setCaminhoLink(caminhoLink);
+            x.add((float) 100);
+            y.add((float) 150);
         }
         else if(tipo==VIDEO){
             Paint p= new Paint();
             p.setAntiAlias(true);
             p.setColor(Color.BLUE);
             paint.add(p);
+            ponto=new Ponto();
+            ponto.setForma(p);
+            ponto.setCaminhoLink(caminhoLink);
+            x.add((float) 100);
+            y.add((float) 150);
         }
         else if(tipo==LINK){
             Paint p= new Paint();
             p.setAntiAlias(true);
             p.setColor(Color.YELLOW);
             paint.add(p);
+            ponto=new Ponto();
+            ponto.setForma(p);
+            ponto.setCaminhoLink(caminhoLink);
+            x.add((float) 100);
+            y.add((float) 150);
         }
         else if(tipo==TEXTO){
             Paint p= new Paint();
             p.setAntiAlias(true);
             p.setColor(Color.GRAY);
             paint.add(p);
+            ponto=new Ponto();
+            ponto.setForma(p);
+            ponto.setCaminhoLink(caminhoLink);
+            x.add((float) 100);
+            y.add((float) 150);
         }
         else if(tipo==IMAGEM){
             Paint p= new Paint();
             p.setAntiAlias(true);
             p.setColor(Color.BLACK);
             paint.add(p);
+            ponto=new Ponto();
+            ponto.setForma(p);
+            ponto.setCaminhoLink(caminhoLink);
+            x.add((float) 100);
+            y.add((float) 150);
         }
     }
-
-
 
     protected void onDraw(Canvas canvas) {
         canvas.drawColor(Color.argb(0, 0, 0, 0));
         canvas.drawColor(Color.TRANSPARENT);
         for (int i = 0; i < paint.size(); i++) {
-            canvas.drawCircle(x[i], y[i], radio[i], (Paint) paint.get(i));
+            canvas.drawCircle(x.get(i), y.get(i), RADIO, (Paint) paint.get(i));
         }
     }
-
 
     public boolean onTouchEvent(MotionEvent evento) {
 
@@ -109,13 +140,13 @@ public class MoverView extends View {
         // circulo=-1;
         if (acction == MotionEvent.ACTION_DOWN) {
             for (int i = 0; i < paint.size(); i++) {
-                cenx = getx - x[i];
-                ceny = gety - y[i];
+                cenx = getx - x.get(i);
+                ceny = gety - y.get(i);
                 distancia = (float) Math.sqrt(cenx * cenx + ceny * ceny);
                 // Log.i("distancia", String.valueOf(distancia));
                 if (distancia <= 50) {
-                    antesX=x[i];
-                    antesY=y[i];
+                    antesX=x.get(i);
+                    antesY=y.get(i);
                     circulo = i;
                     // txt = "El circulo tocado es" + i;
                     invalidate();
@@ -126,14 +157,14 @@ public class MoverView extends View {
             Log.i("distancia2", String.valueOf(distancia));
             Log.i("********************","********");
             //Log.i("distancia1", String.valueOf(circulo));
-            cenx = getx - x[circulo];
-            ceny = gety - y[circulo];
+            cenx = getx - x.get(circulo);
+            ceny = gety - y.get(circulo);
             distancia = (float) Math.sqrt(cenx * cenx + ceny * ceny);
             if(distancia<60 && distancia>12){
                 if(circulo>-1){
                     //posição depois do  movimento
-                    x[circulo]=getx;
-                    y[circulo]=gety;
+                    x.set(circulo,getx);
+                    y.set(circulo,gety);
                     invalidate();
                 }
                 // circulo=-1;
@@ -147,8 +178,14 @@ public class MoverView extends View {
                 Log.i("distanciagety",String.valueOf(gety));//
                 //chama
                 apertei=1;
+
+
+
+
+
+                //String caminhoLink="";
                 Log.i("distancia_aperteiM", String.valueOf(apertei));
-//                    Intent intent = new Intent (String.valueOf(this.class));
+               // Intent intent2 = new Intent (String.valueOf(this.class));
 ////
 //                    //intent.putExtra ("apertei", apertei) ;
 //
@@ -167,6 +204,45 @@ public class MoverView extends View {
 
         // Log.i("distancia2","**********************************************************************", String.valueOf(PDF));
         return true;
+    }
+
+    public class PDF_Activity extends AppCompatActivity {
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            Toast.makeText(this,
+               "Estou no nav_manage!!!", Toast.LENGTH_LONG).show();
+            File file = new File(ponto.getCaminhoLink());
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(file), "application/pdf");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(intent);
+//            setContentView(R.layout.activity_pdf);
+//            //PDFVIEW SHALL DISPLAY OUR PDFS
+//            PDFView pdfView= (PDFView) findViewById(R.id.pdfView);
+//            //SCROLLBAR TO ENABLE SCROLLING
+//            // ScrollBar scrollBar = (ScrollBar) findViewById(R.id.scrollBar);
+//            // pdfView.setScrollBar(scrollBar);
+//            //VERTICAL SCROLLING
+//            // scrollBar.setHorizontal(false);
+//            //SACRIFICE MEMORY FOR QUALITY
+//            //pdfView.useBestQuality(true)
+//            //UNPACK OUR DATA FROM INTENT
+//            Intent i=this.getIntent();
+//            String path=i.getExtras().getString("PATH");
+//            //GET THE PDF FILE
+//            File file=new File(path);
+//            if(file.canRead())
+//            {
+//                //LOAD IT
+//                pdfView.fromFile(file).defaultPage(1).onLoad(new OnLoadCompleteListener() {
+//                    @Override
+//                    public void loadComplete(int nbPages) {
+//                        Toast.makeText(com.example.jamile.cadernocientifico14.MoverView.PDF_Activity.this, String.valueOf(nbPages), Toast.LENGTH_LONG).show();
+//                    }
+//                }).load();
+//            }
+       }
     }
 
 }

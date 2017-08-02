@@ -5,7 +5,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.NavigationView;
@@ -14,6 +18,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,14 +31,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
-
-//
-//
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -43,15 +47,18 @@ public class MainActivity extends AppCompatActivity
     static final  int LINK=3;
     static final  int IMAGEM=4;
     static final  int TEXTO=5;
+    static String CaminhoLink;
+    static Vector <Ponto> pontos=new Vector<Ponto>();
     View l2;
     ImageView img;
     Bitmap thumbnail;
-    MoverView mover;
+    static MoverView mover;
     private ImageView imagem;
     private final int GALERIA_IMAGENS=1;
     private final  int PERMISSAO_REQUEST =2;
     View view;
-Matrix matrix=new Matrix();
+    static  ListView lv;
+    Matrix matrix=new Matrix();
     Float scale=1f;
     ScaleGestureDetector SGD;
     PhotoViewAttacher mAttacher;
@@ -67,17 +74,16 @@ Matrix matrix=new Matrix();
 
         thumbnail = (BitmapFactory.decodeFile(picturePath));
         ImageView image = (ImageView) findViewById(R.id.img22);
+        //Intent intent2 = getIntent();
+//        Bundle bundle= intent2.getExtras();
+//        String picturePath = bundle.getString("DEUS");
         image.setImageBitmap(thumbnail);
 //       final ImageView zoon=(ImageView)findViewById(R.id.imageView);
 
-
         mover = new MoverView(this);
         mover.criarPonto(PDF);
+        Log.i("CAMINHOOOO1", String.valueOf(CaminhoLink));
         view=findViewById(R.id.view_root2);
-
-
-
-
 
         final LinearLayout screenlayout = (LinearLayout) findViewById(R.id.view_root2);
         screenlayout.addView(mover);
@@ -100,34 +106,6 @@ Matrix matrix=new Matrix();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        imagem = (ImageView) findViewById(R.id.img22);
-               imagem.setImageBitmap(thumbnail);
-               view.setBackground(imagem.getDrawable());
-       View view2=getLayoutInflater().inflate(R.layout.content_main,null); // get reference to root activity view
-        setContentView(view2);
-
-        view2.setOnClickListener(new View.OnClickListener() {
-            float zoomFactor = 2f;
-            boolean zoomedOut = false;
-
-            @Override
-            public void onClick(View v) {
-                if(zoomedOut) {
-                    v.setScaleX(1);
-                    v.setScaleY(1);
-                    zoomedOut = false;
-                }
-                else {
-                    v.setScaleX(zoomFactor);
-                    v.setScaleY(zoomFactor);
-                    zoomedOut = true;
-                }
-            }
-        });
-       // mAttacher= new PhotoViewAttacher((ImageView) view);
-        //SGD=new ScaleGestureDetector(this, new ScaleListener());
-
     }
    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener
     {
@@ -185,8 +163,23 @@ Matrix matrix=new Matrix();
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            final ListView lv= (ListView) findViewById(R.id.lv);
-            lv.setAdapter(new CustomAdapter(MainActivity.this));//mover.criarPonto(PDF);
+             lv= (ListView) findViewById(R.id.lv);
+            //visibilidade
+//            TextView layone= (TextView) view.findViewById(R.id.layone);
+//
+//            layone.setVisibility(View.VISIBLE);
+            lv.setVisibility(View.VISIBLE);
+            lv.setAdapter(new CustomAdapter(MainActivity.this));
+           // Log.i("CAMINHOOOO2", String.valueOf(CaminhoLink));
+          //  mover.criarPonto(PDF);
+
+             Toast.makeText(this,
+                    "Estou no nav_share!!!", Toast.LENGTH_LONG).show();
+//            this.getSupportFragmentManager().popBackStack();
+//            this.getSupportFragmentManager().findFragmentById(R.id.fragment2);
+//            getSupportFragmentManager()
+//                    .beginTransaction()
+//                    .replace(R.id.fragment2, new EmBrancoFragment()).commit();
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {mover.criarPonto(VIDEO);
 //            Toast.makeText(this,
@@ -229,9 +222,12 @@ Matrix matrix=new Matrix();
         }
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    //
+    ////////////////////////////////////////////// CustomAdapter ////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static class CustomAdapter extends BaseAdapter {
         Context c;
         ArrayList<PDFDoc> pdfDocs;
@@ -268,7 +264,12 @@ Matrix matrix=new Matrix();
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    openPDFView(pdfDoc.getPath());
+                    CaminhoLink=pdfDoc.getPath();
+                    Log.i("CAMINHOOOO5555", String.valueOf(CaminhoLink));
+                    lv.setVisibility(View.GONE);
+                    mover.criarPonto(PDF);//////////////////////////////////////////////
+
+
                 }
             });
             return view;
@@ -309,4 +310,189 @@ Matrix matrix=new Matrix();
             return pdfDocs;
         }
     }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////// MoverView ////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public class MoverView extends View {
+        float  distancia = 0;
+        double cenx =0;
+        double ceny = 0;
+        static final  int PDF=1;
+        static final  int VIDEO=2;
+        static final  int LINK=3;
+        static final  int IMAGEM=4;
+        static final  int TEXTO=5;
+        float antesX, antesY;
+        int apertei =0;
+
+
+        View l2;
+        ImageView img;
+        Bitmap thumbnail;
+        //MainActivity.MoverView mover;
+        private ImageView imagem;
+        private final int GALERIA_IMAGENS=1;
+        private final  int PERMISSAO_REQUEST =2;
+        View view;
+
+        float[] x = {50, 50,50,50, 50,50,50, 50,50,50, 50,50,50, 50,50,50, 50,50,50, 50,50,50, 50,50};
+        float[] y = {130, 130,130,130, 130,130,130, 130,130,130, 130,130,130, 130,130,130, 130,130};
+        //float[] radio = {50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50};
+        float[] radio = {20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20};
+        Vector paint = new  Vector();
+        //Paint paint[] = new Paint[2];
+        Paint p,p2,p3,p4;
+
+        // DesenhaPonto ponto;
+
+        int circulo = -1;
+        String txt = "Mueve Algun circulo";
+        Drawable imagen;
+        Ponto ponto;
+        Vector <Ponto> pontos=new Vector<Ponto>();
+    Context c;
+        public MoverView(Context context) {
+            super(context);
+            this.c=context;
+        }
+
+        void criarPonto(int tipo){
+
+
+            if(tipo==PDF){
+                Paint p= new Paint();
+                p.setAntiAlias(true);
+                p.setColor(Color.RED);
+                paint.add(p);/////////
+                ponto=new Ponto();
+                ponto.setForma(p);
+                ponto.setCaminhoLink(CaminhoLink);
+                Log.i("CAMINHOOOO6666", String.valueOf(CaminhoLink));
+            }
+            else if(tipo==VIDEO){
+                Paint p= new Paint();
+                p.setAntiAlias(true);
+                p.setColor(Color.BLUE);
+                paint.add(p);
+                ponto=new Ponto();
+                ponto.setForma(p);
+                ponto.setCaminhoLink(CaminhoLink);
+                invalidate ();
+            }
+            else if(tipo==LINK){
+                Paint p= new Paint();
+                p.setAntiAlias(true);
+                p.setColor(Color.YELLOW);
+                paint.add(p);
+                ponto=new Ponto();
+                ponto.setForma(p);
+                ponto.setCaminhoLink(CaminhoLink);
+                invalidate ();
+            }
+            else if(tipo==TEXTO){
+                Paint p= new Paint();
+                p.setAntiAlias(true);
+                p.setColor(Color.GRAY);
+                paint.add(p);
+                ponto=new Ponto();
+                ponto.setForma(p);
+                ponto.setCaminhoLink(CaminhoLink);
+                invalidate ();
+            }
+            else if(tipo==IMAGEM){
+                Paint p= new Paint();
+                p.setAntiAlias(true);
+                p.setColor(Color.BLACK);
+                paint.add(p);
+                ponto=new Ponto();
+                ponto.setForma(p);
+                ponto.setCaminhoLink(CaminhoLink);
+                invalidate ();
+            }
+        }
+
+        protected void onDraw(Canvas canvas) {
+            canvas.drawColor(Color.argb(0, 0, 0, 0));
+            canvas.drawColor(Color.TRANSPARENT);
+            for (int i = 0; i < paint.size(); i++) {
+                canvas.drawCircle(x[i], y[i], radio[i], (Paint) paint.get(i));
+            }
+        }
+
+        public boolean onTouchEvent(MotionEvent evento) {
+
+            float getx = evento.getX();
+            // Log.i("getx", String.valueOf(getx));
+            float gety = evento.getY();
+            int acction = evento.getAction();
+
+            // circulo=-1;
+            if (acction == MotionEvent.ACTION_DOWN) {
+                for (int i = 0; i < paint.size(); i++) {
+                    cenx = getx - x[i];
+                    ceny = gety - y[i];
+                    distancia = (float) Math.sqrt(cenx * cenx + ceny * ceny);
+                    // Log.i("distancia", String.valueOf(distancia));
+                    if (distancia <= 50) {
+                        antesX=x[i];
+                        antesY=y[i];
+                        circulo = i;
+                        // txt = "El circulo tocado es" + i;
+                        invalidate();
+                    }
+                }
+            }
+            if(acction==MotionEvent.ACTION_MOVE) {
+                Log.i("distancia2", String.valueOf(distancia));
+                Log.i("********************", "********");
+                //Log.i("distancia1", String.valueOf(circulo));
+                if (circulo != -1) {
+                    cenx = getx - x[circulo];
+                    ceny = gety - y[circulo];
+                    distancia = (float) Math.sqrt(cenx * cenx + ceny * ceny);
+                    if (distancia < 60 && distancia > 12) {
+                        if (circulo > -1) {
+                            //posição depois do  movimento
+                            x[circulo] = getx;
+                            y[circulo] = gety;
+                            invalidate();
+                        }
+                        // circulo=-1;
+                    } else if ((Math.abs(getx - antesX) < 7 && Math.abs(gety - antesY) < 7)) {
+
+                        Log.i("CAMINHO", String.valueOf(ponto.getCaminhoLink()));
+                        Log.i("distanciaYantesY", String.valueOf(antesY));
+                        Log.i("distanciagetx", String.valueOf(getx));
+                        Log.i("distanciagety", String.valueOf(gety));//
+                        //chama
+
+                        Intent it = new Intent(c, PDFACT.class);
+                        //l
+
+                        Bundle bundle = new Bundle();
+                        //String ident="Inicio";
+                        bundle.putString("CaminhoLink", CaminhoLink);
+                        it.putExtras(bundle);
+                        startActivity(it);
+
+                        apertei = 1;
+
+
+                        Log.i("distancia_aperteiM", String.valueOf(apertei));
+
+
+                    } else {// calcular a distancia do toque atual com a distancia do circulo atual
+                        Log.i("dist", String.valueOf(circulo));
+                    }
+                }
+            }
+            // Log.i("distancia2","**********************************************************************", String.valueOf(PDF));
+            return true;
+        }
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
 }
