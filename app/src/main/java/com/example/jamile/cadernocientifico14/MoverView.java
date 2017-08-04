@@ -71,10 +71,12 @@ public class MoverView extends View {
             p.setColor(Color.RED);
             paint.add(p);/////////
             ponto=new Ponto();
-            ponto.setForma(p);
-            ponto.setCaminhoLink(caminhoLink);
+            ponto.setPaint(p);
+            //ponto.setCaminhoLink(CaminhoLink);
+            //Log.i("CAMINHOOOO6666", String.valueOf(CaminhoLink));
             x.add((float) 100);
             y.add((float) 150);
+            invalidate ();
         }
         else if(tipo==VIDEO){
             Paint p= new Paint();
@@ -82,10 +84,12 @@ public class MoverView extends View {
             p.setColor(Color.BLUE);
             paint.add(p);
             ponto=new Ponto();
-            ponto.setForma(p);
-            ponto.setCaminhoLink(caminhoLink);
+            ponto.setPaint(p);
+           // ponto.setCaminhoLink(CaminhoLink);
+            pontos.add(ponto);
             x.add((float) 100);
             y.add((float) 150);
+            invalidate ();
         }
         else if(tipo==LINK){
             Paint p= new Paint();
@@ -93,10 +97,11 @@ public class MoverView extends View {
             p.setColor(Color.YELLOW);
             paint.add(p);
             ponto=new Ponto();
-            ponto.setForma(p);
-            ponto.setCaminhoLink(caminhoLink);
+            ponto.setPaint(p);
+            //ponto.setCaminhoLink(CaminhoLink);
             x.add((float) 100);
             y.add((float) 150);
+            invalidate ();
         }
         else if(tipo==TEXTO){
             Paint p= new Paint();
@@ -104,10 +109,11 @@ public class MoverView extends View {
             p.setColor(Color.GRAY);
             paint.add(p);
             ponto=new Ponto();
-            ponto.setForma(p);
-            ponto.setCaminhoLink(caminhoLink);
+            ponto.setPaint(p);
+           // ponto.setCaminhoLink(CaminhoLink);
             x.add((float) 100);
             y.add((float) 150);
+            invalidate ();
         }
         else if(tipo==IMAGEM){
             Paint p= new Paint();
@@ -115,10 +121,11 @@ public class MoverView extends View {
             p.setColor(Color.BLACK);
             paint.add(p);
             ponto=new Ponto();
-            ponto.setForma(p);
-            ponto.setCaminhoLink(caminhoLink);
+            ponto.setPaint(p);
+           // ponto.setCaminhoLink(CaminhoLink);
             x.add((float) 100);
             y.add((float) 150);
+            invalidate ();
         }
     }
 
@@ -126,7 +133,7 @@ public class MoverView extends View {
         canvas.drawColor(Color.argb(0, 0, 0, 0));
         canvas.drawColor(Color.TRANSPARENT);
         for (int i = 0; i < paint.size(); i++) {
-            canvas.drawCircle(x.get(i), y.get(i), RADIO, (Paint) paint.get(i));
+            canvas.drawCircle(x.get(i), y.get(i), RADIO, (Paint) pontos.get(i).getPaint());
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.jamile.cadernocientifico14;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -27,6 +28,8 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -81,7 +84,7 @@ public class MainActivity extends AppCompatActivity
 //       final ImageView zoon=(ImageView)findViewById(R.id.imageView);
 
         mover = new MoverView(this);
-        mover.criarPonto(PDF);
+       // mover.criarPonto(PDF);
         Log.i("CAMINHOOOO1", String.valueOf(CaminhoLink));
         view=findViewById(R.id.view_root2);
 
@@ -119,11 +122,11 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
     }
-    @Override
-    public  boolean onTouchEvent(MotionEvent event){
-        SGD.onTouchEvent(event);
-        return  true;
-    }
+//    @Override
+//    public  boolean onTouchEvent(MotionEvent event){
+//        SGD.onTouchEvent(event);
+//        return  true;
+//    }
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -188,7 +191,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {  mover.criarPonto(TEXTO);// Toast.makeText(this,
 //                "Estou no nav_slideshow!!!", Toast.LENGTH_LONG).show();
 
-        } else if (id == R.id.nav_manage) {mover.criarPonto(LINK);
+        } else if (id == R.id.nav_manage) {
+            ExibeDialog ();//mover.criarPonto(LINK);
 //            Toast.makeText(this,
 //                "Estou no nav_manage!!!", Toast.LENGTH_LONG).show();
         } else if (id == R.id.img) {mover.criarPonto(IMAGEM);// Toast.makeText(this,
@@ -338,10 +342,10 @@ public class MainActivity extends AppCompatActivity
         private final  int PERMISSAO_REQUEST =2;
         View view;
 
-        float[] x = {50, 50,50,50, 50,50,50, 50,50,50, 50,50,50, 50,50,50, 50,50,50, 50,50,50, 50,50};
-        float[] y = {130, 130,130,130, 130,130,130, 130,130,130, 130,130,130, 130,130,130, 130,130};
-        //float[] radio = {50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50};
-        float[] radio = {20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20};
+    Vector <Float> x=new Vector <Float> ();
+    Vector <Float>  y=new Vector<Float>  ();
+    //float[] radio = {50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50};
+    final float RADIO = 30;
         Vector paint = new  Vector();
         //Paint paint[] = new Paint[2];
         Paint p,p2,p3,p4;
@@ -368,9 +372,14 @@ public class MainActivity extends AppCompatActivity
                 p.setColor(Color.RED);
                 paint.add(p);/////////
                 ponto=new Ponto();
-                ponto.setForma(p);
+                ponto.setPaint(p);
+                ponto.setTipo(PDF);
                 ponto.setCaminhoLink(CaminhoLink);
                 Log.i("CAMINHOOOO6666", String.valueOf(CaminhoLink));
+                pontos.add(ponto);
+                x.add((float) 100);
+                y.add((float) 150);
+                invalidate ();
             }
             else if(tipo==VIDEO){
                 Paint p= new Paint();
@@ -378,8 +387,12 @@ public class MainActivity extends AppCompatActivity
                 p.setColor(Color.BLUE);
                 paint.add(p);
                 ponto=new Ponto();
-                ponto.setForma(p);
+                ponto.setTipo(VIDEO);
+                ponto.setPaint(p);
                 ponto.setCaminhoLink(CaminhoLink);
+                pontos.add(ponto);
+                x.add((float) 100);
+                y.add((float) 150);
                 invalidate ();
             }
             else if(tipo==LINK){
@@ -388,8 +401,12 @@ public class MainActivity extends AppCompatActivity
                 p.setColor(Color.YELLOW);
                 paint.add(p);
                 ponto=new Ponto();
-                ponto.setForma(p);
+                ponto.setTipo(LINK);
+                ponto.setPaint(p);
                 ponto.setCaminhoLink(CaminhoLink);
+                pontos.add(ponto);
+                x.add((float) 100);
+                y.add((float) 150);
                 invalidate ();
             }
             else if(tipo==TEXTO){
@@ -398,8 +415,12 @@ public class MainActivity extends AppCompatActivity
                 p.setColor(Color.GRAY);
                 paint.add(p);
                 ponto=new Ponto();
-                ponto.setForma(p);
+                ponto.setPaint(p);
+                ponto.setTipo(TEXTO);
                 ponto.setCaminhoLink(CaminhoLink);
+                pontos.add(ponto);
+                x.add((float) 100);
+                y.add((float) 150);
                 invalidate ();
             }
             else if(tipo==IMAGEM){
@@ -408,8 +429,12 @@ public class MainActivity extends AppCompatActivity
                 p.setColor(Color.BLACK);
                 paint.add(p);
                 ponto=new Ponto();
-                ponto.setForma(p);
+                ponto.setPaint(p);
+                ponto.setTipo(IMAGEM);
                 ponto.setCaminhoLink(CaminhoLink);
+                pontos.add(ponto);
+                x.add((float) 100);
+                y.add((float) 150);
                 invalidate ();
             }
         }
@@ -417,8 +442,8 @@ public class MainActivity extends AppCompatActivity
         protected void onDraw(Canvas canvas) {
             canvas.drawColor(Color.argb(0, 0, 0, 0));
             canvas.drawColor(Color.TRANSPARENT);
-            for (int i = 0; i < paint.size(); i++) {
-                canvas.drawCircle(x[i], y[i], radio[i], (Paint) paint.get(i));
+            for (int i = 0; i < pontos.size(); i++) {
+                canvas.drawCircle(x.get(i), y.get(i), RADIO,  pontos.get(i).getPaint());
             }
         }
 
@@ -432,13 +457,13 @@ public class MainActivity extends AppCompatActivity
             // circulo=-1;
             if (acction == MotionEvent.ACTION_DOWN) {
                 for (int i = 0; i < paint.size(); i++) {
-                    cenx = getx - x[i];
-                    ceny = gety - y[i];
+                    cenx = getx - x.get(i);
+                    ceny = gety - y.get(i);
                     distancia = (float) Math.sqrt(cenx * cenx + ceny * ceny);
                     // Log.i("distancia", String.valueOf(distancia));
                     if (distancia <= 50) {
-                        antesX=x[i];
-                        antesY=y[i];
+                        antesX=x.get(i);
+                        antesY=y.get(i);
                         circulo = i;
                         // txt = "El circulo tocado es" + i;
                         invalidate();
@@ -450,14 +475,14 @@ public class MainActivity extends AppCompatActivity
                 Log.i("********************", "********");
                 //Log.i("distancia1", String.valueOf(circulo));
                 if (circulo != -1) {
-                    cenx = getx - x[circulo];
-                    ceny = gety - y[circulo];
+                    cenx = getx - x.get(circulo);
+                    ceny = gety - y.get(circulo);
                     distancia = (float) Math.sqrt(cenx * cenx + ceny * ceny);
                     if (distancia < 60 && distancia > 12) {
                         if (circulo > -1) {
                             //posição depois do  movimento
-                            x[circulo] = getx;
-                            y[circulo] = gety;
+                            x.set(circulo,getx);
+                            y.set(circulo,gety);
                             invalidate();
                         }
                         // circulo=-1;
@@ -469,14 +494,38 @@ public class MainActivity extends AppCompatActivity
                         Log.i("distanciagety", String.valueOf(gety));//
                         //chama
 
-                        Intent it = new Intent(c, PDFACT.class);
-                        //l
 
-                        Bundle bundle = new Bundle();
-                        //String ident="Inicio";
-                        bundle.putString("CaminhoLink", CaminhoLink);
-                        it.putExtras(bundle);
-                        startActivity(it);
+                        // fazer o for pra selecionar a menor distancia
+                        for (int i = 0; i < pontos.size(); i++) {
+                            //canvas.drawCircle(x.get(i), y.get(i), RADIO,  pontos.get(i).getPaint());
+                            if ((Math.abs(x.get(i) - antesX) < 7 && Math.abs(y.get(i) - antesY) < 7)){
+                                //Log.i("LINK6668", pontos.get(i).getCaminhoLink());
+                                    if (pontos.get(i).getTipo()==PDF){
+                                        Intent it = new Intent(c, PDFACT.class);
+                                        //l
+                                        //Log.i("LINK6669", pontos.get(//i).getCaminhoLink());
+
+                                        Bundle bundle = new Bundle();
+                                        //String ident="Inicio";
+                                        bundle.putString("CaminhoLink", pontos.get(i).getCaminhoLink());
+                                        it.putExtras(bundle);
+                                        startActivity(it);
+                                    }
+
+                                else if(pontos.get(i).getTipo()==LINK){
+                                        Log.i("LINK6667", pontos.get(i).getCaminhoLink());
+                                        Intent it = new Intent(c, AbrirLink.class);
+                                        //l
+
+                                        Bundle bundle = new Bundle();
+                                        //String ident="Inicio";
+                                        bundle.putString("CaminhoLink", pontos.get(i).getCaminhoLink());
+                                        it.putExtras(bundle);
+                                        startActivity(it);
+                                }
+                            }
+                        }
+
 
                         apertei = 1;
 
@@ -495,4 +544,51 @@ public class MainActivity extends AppCompatActivity
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+public void chamarCriarPonto(int tipo){
+    mover.criarPonto(tipo);
+
+}
+    private void ExibeDialog(){
+        final Dialog dialog = new Dialog(this);
+
+        dialog.setContentView(R.layout.customdialog);
+
+        //define o título do Dialog
+        dialog.setTitle("Insira o Link:");
+
+        //instancia os objetos que estão no layout customdialog.xml
+        final Button confirmar = (Button) dialog.findViewById(R.id.btn_Confirmar);
+        final Button cancelar = (Button) dialog.findViewById(R.id.btn_Cancelar);
+        final EditText editText = (EditText) dialog.findViewById(R.id.etValor);
+        final TextView tvMens = (TextView) dialog.findViewById(R.id.tvMens);
+//String d= (String) tvMens.getText();
+
+        // tvMens.setText("Nome");
+
+        confirmar.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String cam=editText.getText().toString();
+                CaminhoLink= cam;
+                Log.i("LINK666", CaminhoLink);
+                mover.criarPonto(LINK);
+
+                // passar pra outra activit o texto
+
+                //finaliza o dialog
+                dialog.dismiss();
+            }
+        });
+
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //finaliza o dialog
+                dialog.dismiss();
+            }
+        });
+
+        //exibe na tela o dialog
+        dialog.show();
+
+    }
 }

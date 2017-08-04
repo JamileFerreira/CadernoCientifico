@@ -12,13 +12,14 @@ public class Ponto {
     private int possicaoX;
     private int possicaoY;
     private int tipo;
+    private Paint paint;
 
-    public Paint getForma() {
-        return forma;
+    public Paint getPaint() {
+        return paint;
     }
 
-    public void setForma(Paint forma) {
-        this.forma = forma;
+    public void setPaint(Paint paint) {
+        this.paint = paint;
     }
 
     public int getPossicaoX() {
@@ -37,7 +38,7 @@ public class Ponto {
         this.possicaoY = possicaoY;
     }
 
-    private Paint forma= new Paint();
+
 
 
 
@@ -58,4 +59,7 @@ public class Ponto {
     public void setTipo(int tipo) {
         this.tipo = tipo;
     }
+
+
+
 }
