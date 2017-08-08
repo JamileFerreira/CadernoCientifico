@@ -1,6 +1,5 @@
 package com.example.jamile.cadernocientifico14;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,9 +9,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,24 +23,21 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.util.ArrayList;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.util.Vector;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -45,35 +45,49 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    static final  int PDF=1;
-    static final  int VIDEO=2;
-    static final  int LINK=3;
-    static final  int IMAGEM=4;
-    static final  int TEXTO=5;
+    static final int PDF = 1;
+    static final int VIDEO = 2;
+    static final int LINK = 3;
+    static final int IMAGEM = 4;
+    static final int TEXTO = 5;
     static String CaminhoLink;
-    static Vector <Ponto> pontos=new Vector<Ponto>();
+    static Vector<Ponto> pontos = new Vector<Ponto>();
     View l2;
     ImageView img;
     Bitmap thumbnail;
     static MoverView mover;
     private ImageView imagem;
-    private final int GALERIA_IMAGENS=1;
-    private final  int PERMISSAO_REQUEST =2;
+    private final int GALERIA_IMAGENS = 1;
+    private final int PERMISSAO_REQUEST = 2;
     View view;
-    static  ListView lv;
-    Matrix matrix=new Matrix();
-    Float scale=1f;
+    static ListView lv;
+    Matrix matrix = new Matrix();
+    Float scale = 1f;
     ScaleGestureDetector SGD;
     PhotoViewAttacher mAttacher;
+    static final int ACTIVITY_LISTARPDF = 1;
+    static final int ACTIVITY_AUDIO = 2;
+    static final int ACTIVITY_ADICIONARLINK = 3;
+    static final int ACTIVITY_ADICIONARIMAGEM = 4;
+    static String picturePath;
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Fragment f = (Fragment)findViewById(R.id.fragmentB);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
         Intent intent2 = getIntent();
-        Bundle bundle= intent2.getExtras();
-        String picturePath = bundle.getString("DEUS");
+        Bundle bundle = intent2.getExtras();
+        picturePath = bundle.getString("DEUS");
 
         thumbnail = (BitmapFactory.decodeFile(picturePath));
         ImageView image = (ImageView) findViewById(R.id.img22);
@@ -84,9 +98,9 @@ public class MainActivity extends AppCompatActivity
 //       final ImageView zoon=(ImageView)findViewById(R.id.imageView);
 
         mover = new MoverView(this);
-       // mover.criarPonto(PDF);
+        // mover.criarPonto(PDF);
         Log.i("CAMINHOOOO1", String.valueOf(CaminhoLink));
-        view=findViewById(R.id.view_root2);
+        view = findViewById(R.id.view_root2);
 
         final LinearLayout screenlayout = (LinearLayout) findViewById(R.id.view_root2);
         screenlayout.addView(mover);
@@ -103,26 +117,65 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
-   private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener
-    {
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Main Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
+    }
+
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         @Override
-        public boolean onScale(ScaleGestureDetector detector)
-        {
-            scale=scale*detector.getScaleFactor();
-            scale=Math.max(0.1f,Math.min(scale,5f));
-            matrix.setScale(scale,scale);
+        public boolean onScale(ScaleGestureDetector detector) {
+            scale = scale * detector.getScaleFactor();
+            scale = Math.max(0.1f, Math.min(scale, 5f));
+            matrix.setScale(scale, scale);
             imagem.setImageMatrix(matrix);
             return true;
         }
     }
-//    @Override
+
+    //    @Override
 //    public  boolean onTouchEvent(MotionEvent event){
 //        SGD.onTouchEvent(event);
 //        return  true;
@@ -166,40 +219,67 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-             lv= (ListView) findViewById(R.id.lv);
-            //visibilidade
-//            TextView layone= (TextView) view.findViewById(R.id.layone);
+//            lv = (ListView) findViewById(R.id.lv);
 //
-//            layone.setVisibility(View.VISIBLE);
-            lv.setVisibility(View.VISIBLE);
-            lv.setAdapter(new CustomAdapter(MainActivity.this));
-           // Log.i("CAMINHOOOO2", String.valueOf(CaminhoLink));
-          //  mover.criarPonto(PDF);
+//            lv.setVisibility(View.VISIBLE);
+//            lv.setAdapter(new CustomAdapter(MainActivity.this));
 
-             Toast.makeText(this,
-                    "Estou no nav_share!!!", Toast.LENGTH_LONG).show();
+            Intent i = new Intent(this, ListarPDF.class);
+            //Bundle bundle = new Bundle();
+            //String ident="Inicio";
+            //bundle.putString("fundo", picturePath);
+            // bundle.putString("Inicio", ident);
+            //i.putExtras(bundle);
+            startActivityForResult(i, ACTIVITY_LISTARPDF);
+
+            Toast.makeText(this,
+                    "PDF!!!", Toast.LENGTH_LONG).show();
 //            this.getSupportFragmentManager().popBackStack();
 //            this.getSupportFragmentManager().findFragmentById(R.id.fragment2);
 //            getSupportFragmentManager()
 //                    .beginTransaction()
 //                    .replace(R.id.fragment2, new EmBrancoFragment()).commit();
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {mover.criarPonto(VIDEO);
+        } else if (id == R.id.nav_gallery) {
+
+            EmBrancoFragment.view.setVisibility(View.VISIBLE);
+            CaminhoLink=EmBrancoFragment.outputFile;
+            Log.i("EmBrancoFragment", String.valueOf(CaminhoLink));
+            view.findFocus();
+            mover.criarPonto(VIDEO);
+            //Intent intent2=new Intent(this, GravarAudio.class);
+            //Bundle bundle = new Bundle();
+            //String ident="Inicio";
+            //bundle.putString("DEUS", picturePath);
+            // bundle.putString("Inicio", ident);
+            //intent2.putExtras(bundle);
+            //startActivity(intent2);
+
+            //mover.criarPonto(VIDEO);
 //            Toast.makeText(this,
 //                    "Estou no fragmento!!!", Toast.LENGTH_LONG).show();
 
-        } else if (id == R.id.nav_slideshow) {  mover.criarPonto(TEXTO);// Toast.makeText(this,
+
+        } else if (id == R.id.nav_slideshow) {
+            mover.criarPonto(TEXTO);// Toast.makeText(this,
 //                "Estou no nav_slideshow!!!", Toast.LENGTH_LONG).show();
 
         } else if (id == R.id.nav_manage) {
-            ExibeDialog ();//mover.criarPonto(LINK);
+
+
+            Intent i = new Intent(this, AdicionarLink.class);
+            startActivityForResult(i, ACTIVITY_ADICIONARLINK);
+            //ExibeDialog();//mover.criarPonto(LINK);
 //            Toast.makeText(this,
 //                "Estou no nav_manage!!!", Toast.LENGTH_LONG).show();
-        } else if (id == R.id.img) {mover.criarPonto(IMAGEM);// Toast.makeText(this,
-            //"Estou no nav_share!!!", Toast.LENGTH_LONG).show();
-
-//        } else if (id == R.id.nav_send) {Toast.makeText(this,
-//                "Estou no nav_send!!!", Toast.LENGTH_LONG).show();
+        } else if (id == R.id.img) {
+            Intent i = new Intent(this, AdicionarImagem.class);
+            //Bundle bundle = new Bundle();
+            //String ident="Inicio";
+            //bundle.putString("fundo", picturePath);
+            // bundle.putString("Inicio", ident);
+            //i.putExtras(bundle);
+            startActivityForResult(i, ACTIVITY_ADICIONARIMAGEM);
 
         }
 
@@ -226,111 +306,75 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == ACTIVITY_LISTARPDF) {
+            if(resultCode == RESULT_OK){
+                String resultado = data.getStringExtra("resultado");
+                CaminhoLink=resultado;
+                Toast.makeText(this,
+                        "PDF2!!!", Toast.LENGTH_LONG).show();
+                mover.criarPonto(PDF);
+
+                //Coloque no EditText
+                //EditText seuEditText= (EditText) findViewById(R.id.seuEditText);
+                //seuEditText.setText(resultado);
+            }
+        }
+        else if(requestCode == ACTIVITY_ADICIONARLINK){
+            if(resultCode == RESULT_OK){
+                String resultado = data.getStringExtra("resultado");
+                CaminhoLink=resultado;
+                Toast.makeText(this,
+                        "LINK!!!", Toast.LENGTH_LONG).show();
+                mover.criarPonto(LINK);
+
+                //Coloque no EditText
+                //EditText seuEditText= (EditText) findViewById(R.id.seuEditText);
+                //seuEditText.setText(resultado);
+            }
+        }
+
+        else if(requestCode == ACTIVITY_ADICIONARIMAGEM){
+            if(resultCode == RESULT_OK){
+                String resultado = data.getStringExtra("resultado");
+                CaminhoLink=resultado;
+                Log.i("TESTE 333333333::::::::::", resultado);
+                Toast.makeText(this,
+                        "IMAGEM!!!", Toast.LENGTH_LONG).show();
+                mover.criarPonto(IMAGEM);
+                //Coloque no EditText
+                //EditText seuEditText= (EditText) findViewById(R.id.seuEditText);
+                //seuEditText.setText(resultado);
+            }
+        }
+    }
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     ////////////////////////////////////////////// CustomAdapter ////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public static class CustomAdapter extends BaseAdapter {
-        Context c;
-        ArrayList<PDFDoc> pdfDocs;
-        public CustomAdapter(Context c) {
-            this.c = c;
-            this.pdfDocs = getPDFs();
-        }
-        @Override
-        public int getCount() {
-            return pdfDocs.size();
-        }
-        @Override
-        public Object getItem(int i) {
-            return pdfDocs.get(i);
-        }
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            if(view==null)
-            {
-                //INFLATE CUSTOM LAYOUT
-                view= LayoutInflater.from(c).inflate(R.layout.model,viewGroup,false);
-            }
-            final PDFDoc pdfDoc= (PDFDoc) this.getItem(i);
-            TextView nameTxt= (TextView) view.findViewById(R.id.nameTxt);
-            ImageView img= (ImageView) view.findViewById(R.id.pdfImage);
-            //BIND DATA
-            nameTxt.setText(pdfDoc.getName());
-            img.setImageResource(R.drawable.pdf_icon);
-            //VIEW ITEM CLICK
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    CaminhoLink=pdfDoc.getPath();
-                    Log.i("CAMINHOOOO5555", String.valueOf(CaminhoLink));
-                    lv.setVisibility(View.GONE);
-                    mover.criarPonto(PDF);//////////////////////////////////////////////
 
-
-                }
-            });
-            return view;
-        }
-        //OPEN PDF VIEW
-        private void openPDFView(String path)
-        {
-
-           // ((MainActivity)getActivity()).getSupportFragmentManager().popBackStack();
-            Intent i=new Intent(c,PDF_Activity.class);
-            i.putExtra("PATH",path);
-            c.startActivity(i);
-        }
-
-        private static ArrayList<PDFDoc> getPDFs()
-        {
-            ArrayList<PDFDoc> pdfDocs=new ArrayList<>();
-            //TARGET FOLDER
-            File downloadsFolder= Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-            PDFDoc pdfDoc;
-            if(downloadsFolder.exists())
-            {
-                //GET ALL FILES IN DOWNLOAD FOLDER
-                File[] files=downloadsFolder.listFiles();
-                //LOOP THRU THOSE FILES GETTING NAME AND URI
-                for (int i=0;i<files.length;i++)
-                {
-                    File file=files[i];
-                    if(file.getPath().endsWith("pdf"))
-                    {
-                        pdfDoc=new PDFDoc();
-                        pdfDoc.setName(file.getName());
-                        pdfDoc.setPath(file.getAbsolutePath());
-                        pdfDocs.add(pdfDoc);
-                    }
-                }
-            }
-            return pdfDocs;
-        }
-    }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-////////////////////////////////////////////// MoverView ////////////////////////////////////////////////////////
+    ////////////////////////////////////////////// MoverView ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public class MoverView extends View {
-        float  distancia = 0;
-        double cenx =0;
+        float distancia = 0;
+        double cenx = 0;
         double ceny = 0;
-        static final  int PDF=1;
-        static final  int VIDEO=2;
-        static final  int LINK=3;
-        static final  int IMAGEM=4;
-        static final  int TEXTO=5;
+        static final int PDF = 1;
+        static final int VIDEO = 2;
+        static final int LINK = 3;
+        static final int IMAGEM = 4;
+        static final int TEXTO = 5;
         float antesX, antesY;
-        int apertei =0;
+        int apertei = 0;
 
 
         View l2;
@@ -338,17 +382,21 @@ public class MainActivity extends AppCompatActivity
         Bitmap thumbnail;
         //MainActivity.MoverView mover;
         private ImageView imagem;
-        private final int GALERIA_IMAGENS=1;
-        private final  int PERMISSAO_REQUEST =2;
+        private final int GALERIA_IMAGENS = 1;
+        private final int PERMISSAO_REQUEST = 2;
         View view;
 
-    Vector <Float> x=new Vector <Float> ();
-    Vector <Float>  y=new Vector<Float>  ();
-    //float[] radio = {50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50};
-    final float RADIO = 30;
-        Vector paint = new  Vector();
+        Vector<Float> x = new Vector<Float>();
+        Vector<Float> y = new Vector<Float>();
+        //float[] radio = {50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50};
+        final float RADIO = 40;
+        Vector paint = new Vector();
         //Paint paint[] = new Paint[2];
-        Paint p,p2,p3,p4;
+        Paint p, p2, p3, p4;
+//        Bitmap bipmap = BitmapFactory.decodeResource(this.getResources(),
+//                R.drawable.audio2);
+//        Bitmap bipmap2 = BitmapFactory.decodeResource(this.getResources(),
+//                R.drawable.pdf);
 
         // DesenhaPonto ponto;
 
@@ -356,86 +404,85 @@ public class MainActivity extends AppCompatActivity
         String txt = "Mueve Algun circulo";
         Drawable imagen;
         Ponto ponto;
-        Vector <Ponto> pontos=new Vector<Ponto>();
-    Context c;
+        Vector<Ponto> pontos = new Vector<Ponto>();
+        Context c;
+
         public MoverView(Context context) {
             super(context);
-            this.c=context;
+            this.c = context;
         }
 
-        void criarPonto(int tipo){
+        void criarPonto(int tipo) {
 
 
-            if(tipo==PDF){
-                Paint p= new Paint();
+            if (tipo == PDF) {
+                Paint p = new Paint();
                 p.setAntiAlias(true);
                 p.setColor(Color.RED);
                 paint.add(p);/////////
-                ponto=new Ponto();
+                ponto = new Ponto();
                 ponto.setPaint(p);
                 ponto.setTipo(PDF);
+//                bipmap=getCircleBitmap(bipmap);
+//                bipmap2=getCircleBitmap(bipmap2);
                 ponto.setCaminhoLink(CaminhoLink);
                 Log.i("CAMINHOOOO6666", String.valueOf(CaminhoLink));
                 pontos.add(ponto);
                 x.add((float) 100);
                 y.add((float) 150);
-                invalidate ();
-            }
-            else if(tipo==VIDEO){
-                Paint p= new Paint();
+                invalidate();
+            } else if (tipo == VIDEO) {Log.i("EmBrancoFragment2", String.valueOf(CaminhoLink));
+                Paint p = new Paint();
                 p.setAntiAlias(true);
                 p.setColor(Color.BLUE);
                 paint.add(p);
-                ponto=new Ponto();
+                ponto = new Ponto();
                 ponto.setTipo(VIDEO);
                 ponto.setPaint(p);
                 ponto.setCaminhoLink(CaminhoLink);
                 pontos.add(ponto);
                 x.add((float) 100);
                 y.add((float) 150);
-                invalidate ();
-            }
-            else if(tipo==LINK){
-                Paint p= new Paint();
+                invalidate();
+            } else if (tipo == LINK) {
+                Paint p = new Paint();
                 p.setAntiAlias(true);
                 p.setColor(Color.YELLOW);
                 paint.add(p);
-                ponto=new Ponto();
+                ponto = new Ponto();
                 ponto.setTipo(LINK);
                 ponto.setPaint(p);
                 ponto.setCaminhoLink(CaminhoLink);
                 pontos.add(ponto);
                 x.add((float) 100);
                 y.add((float) 150);
-                invalidate ();
-            }
-            else if(tipo==TEXTO){
-                Paint p= new Paint();
+                invalidate();
+            } else if (tipo == TEXTO) {
+                Paint p = new Paint();
                 p.setAntiAlias(true);
                 p.setColor(Color.GRAY);
                 paint.add(p);
-                ponto=new Ponto();
+                ponto = new Ponto();
                 ponto.setPaint(p);
                 ponto.setTipo(TEXTO);
                 ponto.setCaminhoLink(CaminhoLink);
                 pontos.add(ponto);
                 x.add((float) 100);
                 y.add((float) 150);
-                invalidate ();
-            }
-            else if(tipo==IMAGEM){
-                Paint p= new Paint();
+                invalidate();
+            } else if (tipo == IMAGEM) {
+                Paint p = new Paint();
                 p.setAntiAlias(true);
                 p.setColor(Color.BLACK);
                 paint.add(p);
-                ponto=new Ponto();
+                ponto = new Ponto();
                 ponto.setPaint(p);
                 ponto.setTipo(IMAGEM);
                 ponto.setCaminhoLink(CaminhoLink);
                 pontos.add(ponto);
                 x.add((float) 100);
                 y.add((float) 150);
-                invalidate ();
+                invalidate();
             }
         }
 
@@ -443,7 +490,10 @@ public class MainActivity extends AppCompatActivity
             canvas.drawColor(Color.argb(0, 0, 0, 0));
             canvas.drawColor(Color.TRANSPARENT);
             for (int i = 0; i < pontos.size(); i++) {
-                canvas.drawCircle(x.get(i), y.get(i), RADIO,  pontos.get(i).getPaint());
+                //if(pon){}
+                //canvas.drawBitmap(bipmap,10,10,null);
+                //canvas.drawBitmap(bipmap2,100,100, null);
+                canvas.drawCircle(x.get(i), y.get(i), RADIO, pontos.get(i).getPaint());
             }
         }
 
@@ -462,15 +512,15 @@ public class MainActivity extends AppCompatActivity
                     distancia = (float) Math.sqrt(cenx * cenx + ceny * ceny);
                     // Log.i("distancia", String.valueOf(distancia));
                     if (distancia <= 50) {
-                        antesX=x.get(i);
-                        antesY=y.get(i);
+                        antesX = x.get(i);
+                        antesY = y.get(i);
                         circulo = i;
                         // txt = "El circulo tocado es" + i;
                         invalidate();
                     }
                 }
             }
-            if(acction==MotionEvent.ACTION_MOVE) {
+            if (acction == MotionEvent.ACTION_MOVE) {
                 Log.i("distancia2", String.valueOf(distancia));
                 Log.i("********************", "********");
                 //Log.i("distancia1", String.valueOf(circulo));
@@ -481,8 +531,8 @@ public class MainActivity extends AppCompatActivity
                     if (distancia < 60 && distancia > 12) {
                         if (circulo > -1) {
                             //posição depois do  movimento
-                            x.set(circulo,getx);
-                            y.set(circulo,gety);
+                            x.set(circulo, getx);
+                            y.set(circulo, gety);
                             invalidate();
                         }
                         // circulo=-1;
@@ -498,31 +548,40 @@ public class MainActivity extends AppCompatActivity
                         // fazer o for pra selecionar a menor distancia
                         for (int i = 0; i < pontos.size(); i++) {
                             //canvas.drawCircle(x.get(i), y.get(i), RADIO,  pontos.get(i).getPaint());
-                            if ((Math.abs(x.get(i) - antesX) < 7 && Math.abs(y.get(i) - antesY) < 7)){
+                            if ((Math.abs(x.get(i) - antesX) < 7 && Math.abs(y.get(i) - antesY) < 7)) {
                                 //Log.i("LINK6668", pontos.get(i).getCaminhoLink());
-                                    if (pontos.get(i).getTipo()==PDF){
-                                        Intent it = new Intent(c, PDFACT.class);
-                                        //l
-                                        //Log.i("LINK6669", pontos.get(//i).getCaminhoLink());
+                                if (pontos.get(i).getTipo() == PDF) {
+                                    Intent it = new Intent(c, PDFACT.class);
+                                    //l
+                                    //Log.i("LINK6669", pontos.get(//i).getCaminhoLink());
 
-                                        Bundle bundle = new Bundle();
-                                        //String ident="Inicio";
-                                        bundle.putString("CaminhoLink", pontos.get(i).getCaminhoLink());
-                                        it.putExtras(bundle);
-                                        startActivity(it);
-                                    }
+                                    Bundle bundle = new Bundle();
+                                    //String ident="Inicio";
+                                    bundle.putString("CaminhoLink", pontos.get(i).getCaminhoLink());
+                                    it.putExtras(bundle);
+                                    startActivity(it);
+                                } else if (pontos.get(i).getTipo() == LINK) {
+                                    Log.i("LINK6667", pontos.get(i).getCaminhoLink());
+                                    Intent it = new Intent(c, AbrirLink.class);
+                                    //l
 
-                                else if(pontos.get(i).getTipo()==LINK){
-                                        Log.i("LINK6667", pontos.get(i).getCaminhoLink());
-                                        Intent it = new Intent(c, AbrirLink.class);
-                                        //l
-
-                                        Bundle bundle = new Bundle();
-                                        //String ident="Inicio";
-                                        bundle.putString("CaminhoLink", pontos.get(i).getCaminhoLink());
-                                        it.putExtras(bundle);
-                                        startActivity(it);
+                                    Bundle bundle = new Bundle();
+                                    //String ident="Inicio";
+                                    bundle.putString("CaminhoLink", pontos.get(i).getCaminhoLink());
+                                    it.putExtras(bundle);
+                                    startActivity(it);
                                 }
+                                else if (pontos.get(i).getTipo() == IMAGEM) {
+                                    Log.i("IMAGEM::::::::::", pontos.get(i).getCaminhoLink());
+                                    Intent it = new Intent(c, AbrirImagem.class);
+
+                                    Bundle bundle = new Bundle();
+
+                                    bundle.putString("caminhoImagem", pontos.get(i).getCaminhoLink());
+                                    it.putExtras(bundle);
+                                    startActivity(it);
+                                }
+
                             }
                         }
 
@@ -545,50 +604,32 @@ public class MainActivity extends AppCompatActivity
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-public void chamarCriarPonto(int tipo){
-    mover.criarPonto(tipo);
+    public void chamarCriarPonto(int tipo) {
+        mover.criarPonto(tipo);
 
-}
-    private void ExibeDialog(){
-        final Dialog dialog = new Dialog(this);
+    }
 
-        dialog.setContentView(R.layout.customdialog);
 
-        //define o título do Dialog
-        dialog.setTitle("Insira o Link:");
+    private Bitmap getCircleBitmap(Bitmap bitmap) {
+        final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(output);
 
-        //instancia os objetos que estão no layout customdialog.xml
-        final Button confirmar = (Button) dialog.findViewById(R.id.btn_Confirmar);
-        final Button cancelar = (Button) dialog.findViewById(R.id.btn_Cancelar);
-        final EditText editText = (EditText) dialog.findViewById(R.id.etValor);
-        final TextView tvMens = (TextView) dialog.findViewById(R.id.tvMens);
-//String d= (String) tvMens.getText();
+        final int color = Color.RED;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final RectF rectF = new RectF(rect);
 
-        // tvMens.setText("Nome");
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawOval(rectF, paint);
 
-        confirmar.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                String cam=editText.getText().toString();
-                CaminhoLink= cam;
-                Log.i("LINK666", CaminhoLink);
-                mover.criarPonto(LINK);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
 
-                // passar pra outra activit o texto
+        bitmap.recycle();
 
-                //finaliza o dialog
-                dialog.dismiss();
-            }
-        });
-
-        cancelar.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //finaliza o dialog
-                dialog.dismiss();
-            }
-        });
-
-        //exibe na tela o dialog
-        dialog.show();
-
+        return output;
     }
 }

@@ -19,4 +19,6 @@ public class ListaPDF_Fragment extends Fragment {
         return inflater.inflate(R.layout.fragment_lista_pdf, container, false);
     }
 
+
+
 }

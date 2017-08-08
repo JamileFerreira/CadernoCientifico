@@ -12,21 +12,21 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
+import android.util.Log;
 import android.widget.ImageView;
 
-public class Inicio extends AppCompatActivity {
+public class AdicionarImagem extends AppCompatActivity {
     private ImageView imagem;
     private final int GALERIA_IMAGENS = 1;
     private final int PERMISSAO_REQUEST = 2;
     Bitmap thumbnail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_inicio);
+        setContentView(R.layout.activity_adicionar_imagem);
 
-//Parte de permissão
+        //Parte de permissão
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -43,19 +43,19 @@ public class Inicio extends AppCompatActivity {
         //Abrindo a galeria
         //imagem = (ImageView) findViewById(R.id.ivImagem);
         imagem = (ImageView) findViewById(R.id.img);
-        Button galeria = (Button) findViewById(R.id.btimg);
-        galeria.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+       // Button galeria = (Button) findViewById(R.id.btimg);
+        //galeria.setOnClickListener(new View.OnClickListener() {
+          //  @Override
+            //public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, 1);
 
-            }
-        });
+          //  }
+        //});
+
 
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -69,14 +69,12 @@ public class Inicio extends AppCompatActivity {
             c.close();
             thumbnail = (BitmapFactory.decodeFile(picturePath));
             // imagem.setImageBitmap(thumbnail);
-            Intent intent2=new Intent(this, MainActivity.class);
-            Bundle bundle = new Bundle();
-            //String ident="Inicio";
-            bundle.putString("DEUS", picturePath);
-           // bundle.putString("Inicio", ident);
-            intent2.putExtras(bundle);
-            startActivity(intent2);
-
+            String caminhoImagem = picturePath;
+            Intent returnIntent = new Intent();
+            Log.i("TESTE 22222::::::::::", caminhoImagem);
+            returnIntent.putExtra("resultado", caminhoImagem);
+            setResult(RESULT_OK, returnIntent);
+            finish();
 
 
 
@@ -108,4 +106,5 @@ public class Inicio extends AppCompatActivity {
             return;
         }
     }
+
 }

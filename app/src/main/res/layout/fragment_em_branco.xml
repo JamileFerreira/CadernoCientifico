@@ -1,11 +1,66 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@id/fragment"
-    tools:context="com.example.jamile.cadernocientifico14.EmBrancoFragment">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@id/fragmentB"
+    tools:context="com.example.jamile.cadernocientifico14.EmBrancoFragment"
+    android:background="@color/colorPrimary">
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Record"
+        android:id="@+id/button"
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="59dp"
+        android:visibility="gone"/>
 
-    <!-- TODO: Update blank fragment layout -->
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop"
+        android:id="@+id/button2"
+        android:layout_alignTop="@+id/button"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="play"
+        android:id="@+id/button3"
+        android:layout_alignTop="@+id/button2"
+        android:layout_alignRight="@+id/textView"
+        android:layout_alignEnd="@+id/textView"
+        android:visibility="gone"/>
 
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/gp2"
+        android:id="@+id/gp"
+        android:background="@null"
+        android:contentDescription="TEST"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/parar"
+        android:text="GRAVAR"
+        android:textColor="#FFFFFF"
+        android:textSize="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="51dp"
+        android:layout_centerHorizontal="true" />
+
+    <Chronometer
+        android:id="@+id/chronometer"
+        android:textSize="30dp"
+        android:textColor="#FFFFFF"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/parar"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
