@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:id="@id/fragmentB"
     tools:context="com.example.jamile.cadernocientifico14.EmBrancoFragment"
-    android:background="@color/colorPrimary">
+    android:background="#000000">
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

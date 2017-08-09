@@ -42,6 +42,8 @@ import java.util.Vector;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
+import static com.example.jamile.cadernocientifico14.MainActivity.MoverView.AUDIO;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity
     static final int ACTIVITY_AUDIO = 2;
     static final int ACTIVITY_ADICIONARLINK = 3;
     static final int ACTIVITY_ADICIONARIMAGEM = 4;
+    static final int ACTIVITY_ADICIONARTEXTO = 5;
     static String picturePath;
 
     /**
@@ -82,7 +85,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Fragment f = (Fragment)findViewById(R.id.fragmentB);
-
+        //EmBrancoFragment.view.setVisibility(GONE);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
         Intent intent2 = getIntent();
@@ -218,71 +221,39 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-//            lv = (ListView) findViewById(R.id.lv);
-//
-//            lv.setVisibility(View.VISIBLE);
-//            lv.setAdapter(new CustomAdapter(MainActivity.this));
-
+        if (id == R.id.itemPDF) {
             Intent i = new Intent(this, ListarPDF.class);
-            //Bundle bundle = new Bundle();
-            //String ident="Inicio";
-            //bundle.putString("fundo", picturePath);
-            // bundle.putString("Inicio", ident);
-            //i.putExtras(bundle);
             startActivityForResult(i, ACTIVITY_LISTARPDF);
 
-            Toast.makeText(this,
-                    "PDF!!!", Toast.LENGTH_LONG).show();
-//            this.getSupportFragmentManager().popBackStack();
-//            this.getSupportFragmentManager().findFragmentById(R.id.fragment2);
-//            getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .replace(R.id.fragment2, new EmBrancoFragment()).commit();
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.itemAUDIO) {
+            //EmBrancoFragment.view.setVisibility(View.VISIBLE);
+           // CaminhoLink=EmBrancoFragment.outputFile;
+            //Log.i("EmBrancoFragment", String.valueOf(CaminhoLink));
+            //view.findFocus();
 
-            EmBrancoFragment.view.setVisibility(View.VISIBLE);
-            CaminhoLink=EmBrancoFragment.outputFile;
-            Log.i("EmBrancoFragment", String.valueOf(CaminhoLink));
-            view.findFocus();
-            mover.criarPonto(VIDEO);
-            //Intent intent2=new Intent(this, GravarAudio.class);
-            //Bundle bundle = new Bundle();
-            //String ident="Inicio";
-            //bundle.putString("DEUS", picturePath);
-            // bundle.putString("Inicio", ident);
-            //intent2.putExtras(bundle);
-            //startActivity(intent2);
+            Intent i = new Intent(this, GravarAudio.class);
+            startActivityForResult(i, ACTIVITY_AUDIO);
 
-            //mover.criarPonto(VIDEO);
-//            Toast.makeText(this,
-//                    "Estou no fragmento!!!", Toast.LENGTH_LONG).show();
+            //mover.criarPonto(AUDIO);
 
+        } else if (id == R.id.itemTEXTO) {
+            Intent i = new Intent(this, EscreverTexto.class);
+            startActivityForResult(i, ACTIVITY_ADICIONARTEXTO);
+            //mover.criarPonto(TEXTO);
 
-        } else if (id == R.id.nav_slideshow) {
-            mover.criarPonto(TEXTO);// Toast.makeText(this,
-//                "Estou no nav_slideshow!!!", Toast.LENGTH_LONG).show();
-
-        } else if (id == R.id.nav_manage) {
-
-
+        } else if (id == R.id.itemLINK) {
             Intent i = new Intent(this, AdicionarLink.class);
             startActivityForResult(i, ACTIVITY_ADICIONARLINK);
-            //ExibeDialog();//mover.criarPonto(LINK);
-//            Toast.makeText(this,
-//                "Estou no nav_manage!!!", Toast.LENGTH_LONG).show();
-        } else if (id == R.id.img) {
-            Intent i = new Intent(this, AdicionarImagem.class);
-            //Bundle bundle = new Bundle();
-            //String ident="Inicio";
-            //bundle.putString("fundo", picturePath);
-            // bundle.putString("Inicio", ident);
-            //i.putExtras(bundle);
-            startActivityForResult(i, ACTIVITY_ADICIONARIMAGEM);
 
+        } else if (id == R.id.itemIMAGEM) {
+            Intent i = new Intent(this, AdicionarImagem.class);
+            startActivityForResult(i, ACTIVITY_ADICIONARIMAGEM);
         }
 
+        else if (id == R.id.itemVIDEO) {
+            Intent i = new Intent(this, AdicionarImagem.class);
+            startActivityForResult(i, ACTIVITY_ADICIONARIMAGEM);
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -349,6 +320,33 @@ public class MainActivity extends AppCompatActivity
                 //seuEditText.setText(resultado);
             }
         }
+
+        else if(requestCode == ACTIVITY_AUDIO){
+            if(resultCode == RESULT_OK){
+                String resultado = data.getStringExtra("resultado");
+                CaminhoLink=resultado;
+                Log.i("TESTE 333333333::::::::::", resultado);
+                Toast.makeText(this,
+                        "AUDIO!!!", Toast.LENGTH_LONG).show();
+                mover.criarPonto(AUDIO);
+                //Coloque no EditText
+                //EditText seuEditText= (EditText) findViewById(R.id.seuEditText);
+                //seuEditText.setText(resultado);
+            }
+        }
+        else if(requestCode == ACTIVITY_ADICIONARTEXTO){
+            if(resultCode == RESULT_OK){
+                String resultado = data.getStringExtra("resultado");
+                CaminhoLink=resultado;
+                Log.i("TESTE 333333333::::::::::", resultado);
+                Toast.makeText(this,
+                        "AUDIO!!!", Toast.LENGTH_LONG).show();
+                mover.criarPonto(TEXTO);
+                //Coloque no EditText
+                //EditText seuEditText= (EditText) findViewById(R.id.seuEditText);
+                //seuEditText.setText(resultado);
+            }
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -373,6 +371,7 @@ public class MainActivity extends AppCompatActivity
         static final int LINK = 3;
         static final int IMAGEM = 4;
         static final int TEXTO = 5;
+        static final int AUDIO = 7;
         float antesX, antesY;
         int apertei = 0;
 
@@ -413,7 +412,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         void criarPonto(int tipo) {
-
 
             if (tipo == PDF) {
                 Paint p = new Paint();
@@ -478,6 +476,20 @@ public class MainActivity extends AppCompatActivity
                 ponto = new Ponto();
                 ponto.setPaint(p);
                 ponto.setTipo(IMAGEM);
+                ponto.setCaminhoLink(CaminhoLink);
+                pontos.add(ponto);
+                x.add((float) 100);
+                y.add((float) 150);
+                invalidate();
+            }
+            else if (tipo == AUDIO) {
+                Paint p = new Paint();
+                p.setAntiAlias(true);
+                p.setColor(Color.GREEN);
+                paint.add(p);
+                ponto = new Ponto();
+                ponto.setPaint(p);
+                ponto.setTipo(AUDIO);
                 ponto.setCaminhoLink(CaminhoLink);
                 pontos.add(ponto);
                 x.add((float) 100);
@@ -581,16 +593,32 @@ public class MainActivity extends AppCompatActivity
                                     it.putExtras(bundle);
                                     startActivity(it);
                                 }
+                                else if (pontos.get(i).getTipo() == AUDIO) {
+                                    Log.i("IMAGEM::::::::::", pontos.get(i).getCaminhoLink());
+                                    Intent it = new Intent(c, PlayAudio.class);
 
+                                    Bundle bundle = new Bundle();
+
+                                    bundle.putString("caminhoImagem", pontos.get(i).getCaminhoLink());
+                                    it.putExtras(bundle);
+                                    startActivity(it);
+                                }
+                                else if (pontos.get(i).getTipo() == TEXTO) {
+                                    Log.i("IMAGEM::::::::::", pontos.get(i).getCaminhoLink());
+                                    Intent it = new Intent(c, ExibirTexto.class);
+
+                                    Bundle bundle = new Bundle();
+
+                                    bundle.putString("texto", pontos.get(i).getCaminhoLink());
+                                    it.putExtras(bundle);
+                                    startActivity(it);
+                                }
                             }
                         }
 
-
                         apertei = 1;
 
-
                         Log.i("distancia_aperteiM", String.valueOf(apertei));
-
 
                     } else {// calcular a distancia do toque atual com a distancia do circulo atual
                         Log.i("dist", String.valueOf(circulo));

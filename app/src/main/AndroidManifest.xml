@@ -40,7 +40,10 @@
         <activity android:name=".ListarPDF" />
         <activity android:name=".AdicionarLink" />
         <activity android:name=".AdicionarImagem" />
-        <activity android:name=".AbrirImagem"></activity>
+        <activity android:name=".AbrirImagem" />
+        <activity android:name=".PlayAudio" />
+        <activity android:name=".EscreverTexto" />
+        <activity android:name=".ExibirTexto"></activity>
     </application>
 
 </manifest>

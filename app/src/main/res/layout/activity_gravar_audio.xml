@@ -8,81 +8,67 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.jamile.cadernocientifico14.GravarAudio">
+    tools:context="com.example.jamile.cadernocientifico14.GravarAudio"
+    android:background="#000000">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tutorialspoint"
-        android:id="@+id/textView2"
-        android:textColor="#ff3eff0f"
-        android:textSize="35dp"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
-        tools:text="GRAVADOR"
-        android:visibility="gone"/>
+<Button
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Record"
+android:id="@+id/button"
+android:layout_below="@+id/imageView"
+android:layout_alignParentLeft="true"
+android:layout_alignParentStart="true"
+android:layout_marginTop="59dp"
+android:visibility="gone"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Record"
-        android:id="@+id/button"
-        android:layout_below="@+id/imageView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="59dp"
-        android:visibility="gone"/>
+<Button
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Stop"
+android:id="@+id/button2"
+android:layout_alignTop="@+id/button"
+android:layout_centerHorizontal="true"
+android:visibility="gone"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Stop"
-        android:id="@+id/button2"
-        android:layout_alignTop="@+id/button"
-        android:layout_centerHorizontal="true"
-        android:visibility="gone"/>
+<Button
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="play"
+android:id="@+id/button3"
+android:layout_alignTop="@+id/button2"
+android:layout_alignRight="@+id/textView"
+android:layout_alignEnd="@+id/textView"
+android:visibility="gone"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="play"
-        android:id="@+id/button3"
-        android:layout_alignTop="@+id/button2"
-        android:layout_alignRight="@+id/textView"
-        android:layout_alignEnd="@+id/textView"
-        android:visibility="gone"/>
     <ImageButton
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/gp2"
-        android:id="@+id/gp"
-        android:background="@null"
-        android:text="@+id/parar"
-        android:contentDescription="TEST"
-        android:layout_below="@+id/linearLayout"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="11dp"
-        android:layout_marginEnd="11dp"
-        android:layout_marginTop="176dp" />
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@drawable/gp2"
+    android:id="@+id/gp"
+    android:background="@null"
+    android:contentDescription="TEST"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 
     <Chronometer
-        android:id="@+id/chronometer"
-        android:textSize="30dp"
-        android:textColor="#FFFFFF"
-        android:layout_height="50dp"
-        android:layout_marginTop="16dp"
-        android:layout_width="120dp"
-       />
+    android:id="@+id/chronometer"
+    android:textSize="30dp"
+    android:textColor="#FFFFFF"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+        android:layout_alignTop="@+id/gp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="43dp" />
 
     <TextView
         android:id="@+id/parar"
         android:text="GRAVAR"
         android:textColor="#FFFFFF"
         android:textSize="30dp"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/chronometer"
         android:layout_centerHorizontal="true" />
-
 </RelativeLayout>

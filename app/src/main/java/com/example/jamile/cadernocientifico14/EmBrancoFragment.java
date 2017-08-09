@@ -66,7 +66,7 @@ public class EmBrancoFragment extends Fragment {
                     // Log.i("I am here");
                     parar.setText("PARAR");
                     if (apertei == 1) {
-
+                        view.setVisibility(GONE);
                         Log.i("AAAA", String.valueOf(apertei));
                         myAudioRecorder.stop();
                         myAudioRecorder.release();
@@ -80,7 +80,7 @@ public class EmBrancoFragment extends Fragment {
                         parar.setText("GRAVAR");
                         apertei=0;
                         view.setVisibility(GONE);
-                    } else if(apertei==0){
+                    } else if(apertei==0){view.setVisibility(GONE);
                         myAudioRecorder = new MediaRecorder();
                         myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
                         myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);

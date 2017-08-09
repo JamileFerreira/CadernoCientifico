@@ -61,6 +61,7 @@ public class AdicionarLink extends AppCompatActivity {
             public void onClick(View v) {
                 //finaliza o dialog
                 dialog.dismiss();
+                finish();
             }
         });
 

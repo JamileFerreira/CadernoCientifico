@@ -51,6 +51,7 @@ public class AdicionarImagem extends AppCompatActivity {
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, 1);
 
+
           //  }
         //});
 
@@ -89,6 +90,7 @@ public class AdicionarImagem extends AppCompatActivity {
 //
 //            startActivity(intent2);
         }
+        else{finish();}
     }
     /////////////////////////
 
