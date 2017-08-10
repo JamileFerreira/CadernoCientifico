@@ -53,7 +53,10 @@
         <activity android:name=".EscreverTexto" />
         <activity android:name=".ExibirTexto" />
         <activity android:name=".AbrirGaleria" />
-        <activity android:name=".AbrirCamera"></activity>
+        <activity android:name=".AbrirCamera" />
+        <activity android:name=".ImportarAudio" />
+        <activity android:name=".TirarFoto" />
+        <activity android:name=".PlayVideo"></activity>
     </application>
 
 </manifest>

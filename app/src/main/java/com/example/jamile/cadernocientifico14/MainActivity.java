@@ -31,7 +31,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -43,6 +42,7 @@ import java.util.Vector;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 import static com.example.jamile.cadernocientifico14.MainActivity.MoverView.AUDIO;
+import static com.example.jamile.cadernocientifico14.MainActivity.MoverView.CAMERA;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -72,6 +72,8 @@ public class MainActivity extends AppCompatActivity
     static final int ACTIVITY_ADICIONARLINK = 3;
     static final int ACTIVITY_ADICIONARIMAGEM = 4;
     static final int ACTIVITY_ADICIONARTEXTO = 5;
+    static final int ACTIVITY_IMPORTARAUDIO=6;
+    static final int ACTIVITY_CAMERA = 7;
     static String picturePath;
 
     /**
@@ -236,7 +238,18 @@ public class MainActivity extends AppCompatActivity
 
             //mover.criarPonto(AUDIO);
 
-        } else if (id == R.id.itemTEXTO) {
+        } else if (id == R.id.itemImportarAUDIO) {
+            //EmBrancoFragment.view.setVisibility(View.VISIBLE);
+            // CaminhoLink=EmBrancoFragment.outputFile;
+            //Log.i("EmBrancoFragment", String.valueOf(CaminhoLink));
+            //view.findFocus();
+
+            Intent i = new Intent(this, ImportarAudio.class);
+            startActivityForResult(i, ACTIVITY_IMPORTARAUDIO);
+
+            //mover.criarPonto(AUDIO);
+        }
+        else if (id == R.id.itemTEXTO) {
             Intent i = new Intent(this, EscreverTexto.class);
             startActivityForResult(i, ACTIVITY_ADICIONARTEXTO);
             //mover.criarPonto(TEXTO);
@@ -250,9 +263,9 @@ public class MainActivity extends AppCompatActivity
             startActivityForResult(i, ACTIVITY_ADICIONARIMAGEM);
         }
 
-        else if (id == R.id.itemVIDEO) {
-            Intent i = new Intent(this, AdicionarImagem.class);
-            startActivityForResult(i, ACTIVITY_ADICIONARIMAGEM);
+        else if (id == R.id.itemCAMERA) {
+            Intent i = new Intent(this, TirarFoto.class);
+            startActivityForResult(i, ACTIVITY_CAMERA);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -284,8 +297,8 @@ public class MainActivity extends AppCompatActivity
             if(resultCode == RESULT_OK){
                 String resultado = data.getStringExtra("resultado");
                 CaminhoLink=resultado;
-                Toast.makeText(this,
-                        "PDF2!!!", Toast.LENGTH_LONG).show();
+//                Toast.makeText(this,
+//                        "PDF2!!!", Toast.LENGTH_LONG).show();
                 mover.criarPonto(PDF);
 
                 //Coloque no EditText
@@ -297,8 +310,8 @@ public class MainActivity extends AppCompatActivity
             if(resultCode == RESULT_OK){
                 String resultado = data.getStringExtra("resultado");
                 CaminhoLink=resultado;
-                Toast.makeText(this,
-                        "LINK!!!", Toast.LENGTH_LONG).show();
+//                Toast.makeText(this,
+//                        "LINK!!!", Toast.LENGTH_LONG).show();
                 mover.criarPonto(LINK);
 
                 //Coloque no EditText
@@ -312,9 +325,22 @@ public class MainActivity extends AppCompatActivity
                 String resultado = data.getStringExtra("resultado");
                 CaminhoLink=resultado;
                 Log.i("TESTE 333333333::::::::::", resultado);
-                Toast.makeText(this,
-                        "IMAGEM!!!", Toast.LENGTH_LONG).show();
+//                Toast.makeText(this,
+//                        "IMAGEM!!!", Toast.LENGTH_LONG).show();
                 mover.criarPonto(IMAGEM);
+                //Coloque no EditText
+                //EditText seuEditText= (EditText) findViewById(R.id.seuEditText);
+                //seuEditText.setText(resultado);
+            }
+        }
+        else if(requestCode == ACTIVITY_CAMERA){
+            if(resultCode == RESULT_OK){
+                String resultado = data.getStringExtra("resultado");
+                CaminhoLink=resultado;
+                Log.i("TESTE 333333333::::::::::", resultado);
+//                Toast.makeText(this,
+//                        "IMAGEM!!!", Toast.LENGTH_LONG).show();
+                mover.criarPonto(CAMERA);
                 //Coloque no EditText
                 //EditText seuEditText= (EditText) findViewById(R.id.seuEditText);
                 //seuEditText.setText(resultado);
@@ -326,8 +352,21 @@ public class MainActivity extends AppCompatActivity
                 String resultado = data.getStringExtra("resultado");
                 CaminhoLink=resultado;
                 Log.i("TESTE 333333333::::::::::", resultado);
-                Toast.makeText(this,
-                        "AUDIO!!!", Toast.LENGTH_LONG).show();
+//                Toast.makeText(this,
+//                        "AUDIO!!!", Toast.LENGTH_LONG).show();
+                mover.criarPonto(AUDIO);
+                //Coloque no EditText
+                //EditText seuEditText= (EditText) findViewById(R.id.seuEditText);
+                //seuEditText.setText(resultado);
+            }
+        }
+        else if(requestCode == ACTIVITY_IMPORTARAUDIO){
+            if(resultCode == RESULT_OK){
+                String resultado = data.getStringExtra("resultado");
+                CaminhoLink=resultado;
+                Log.i("TESTE 333333333::::::::::", resultado);
+//                Toast.makeText(this,
+//                        "IMPORTAR ÁUDIO!!!", Toast.LENGTH_LONG).show();
                 mover.criarPonto(AUDIO);
                 //Coloque no EditText
                 //EditText seuEditText= (EditText) findViewById(R.id.seuEditText);
@@ -339,8 +378,8 @@ public class MainActivity extends AppCompatActivity
                 String resultado = data.getStringExtra("resultado");
                 CaminhoLink=resultado;
                 Log.i("TESTE 333333333::::::::::", resultado);
-                Toast.makeText(this,
-                        "AUDIO!!!", Toast.LENGTH_LONG).show();
+//                Toast.makeText(this,
+//                        "AUDIO!!!", Toast.LENGTH_LONG).show();
                 mover.criarPonto(TEXTO);
                 //Coloque no EditText
                 //EditText seuEditText= (EditText) findViewById(R.id.seuEditText);
@@ -372,6 +411,8 @@ public class MainActivity extends AppCompatActivity
         static final int IMAGEM = 4;
         static final int TEXTO = 5;
         static final int AUDIO = 7;
+        static final int  IMPORTARAUDIO=8;
+        static final int CAMERA=9;
         float antesX, antesY;
         int apertei = 0;
 
@@ -482,6 +523,34 @@ public class MainActivity extends AppCompatActivity
                 y.add((float) 150);
                 invalidate();
             }
+            else if (tipo == IMAGEM) {
+                Paint p = new Paint();
+                p.setAntiAlias(true);
+                p.setColor(Color.BLACK);
+                paint.add(p);
+                ponto = new Ponto();
+                ponto.setPaint(p);
+                ponto.setTipo(IMAGEM);
+                ponto.setCaminhoLink(CaminhoLink);
+                pontos.add(ponto);
+                x.add((float) 100);
+                y.add((float) 150);
+                invalidate();
+            }
+            else if (tipo == CAMERA) {
+                Paint p = new Paint();
+                p.setAntiAlias(true);
+                p.setColor(Color.BLACK);
+                paint.add(p);
+                ponto = new Ponto();
+                ponto.setPaint(p);
+                ponto.setTipo(CAMERA);
+                ponto.setCaminhoLink(CaminhoLink);
+                pontos.add(ponto);
+                x.add((float) 100);
+                y.add((float) 150);
+                invalidate();
+            }
             else if (tipo == AUDIO) {
                 Paint p = new Paint();
                 p.setAntiAlias(true);
@@ -490,6 +559,20 @@ public class MainActivity extends AppCompatActivity
                 ponto = new Ponto();
                 ponto.setPaint(p);
                 ponto.setTipo(AUDIO);
+                ponto.setCaminhoLink(CaminhoLink);
+                pontos.add(ponto);
+                x.add((float) 100);
+                y.add((float) 150);
+                invalidate();
+            }
+            else if (tipo == IMPORTARAUDIO) {
+                Paint p = new Paint();
+                p.setAntiAlias(true);
+                p.setColor(Color.GREEN);
+                paint.add(p);
+                ponto = new Ponto();
+                ponto.setPaint(p);
+                ponto.setTipo(IMPORTARAUDIO);
                 ponto.setCaminhoLink(CaminhoLink);
                 pontos.add(ponto);
                 x.add((float) 100);
@@ -593,7 +676,27 @@ public class MainActivity extends AppCompatActivity
                                     it.putExtras(bundle);
                                     startActivity(it);
                                 }
+                                else if (pontos.get(i).getTipo() == CAMERA) {
+                                    Log.i("IMAGEM::::::::::", pontos.get(i).getCaminhoLink());
+                                    Intent it = new Intent(c, AbrirImagem.class);
+
+                                    Bundle bundle = new Bundle();
+
+                                    bundle.putString("caminhoImagem", pontos.get(i).getCaminhoLink());
+                                    it.putExtras(bundle);
+                                    startActivity(it);
+                                }
                                 else if (pontos.get(i).getTipo() == AUDIO) {
+                                    Log.i("IMAGEM::::::::::", pontos.get(i).getCaminhoLink());
+                                    Intent it = new Intent(c, PlayAudio.class);
+
+                                    Bundle bundle = new Bundle();
+
+                                    bundle.putString("caminhoImagem", pontos.get(i).getCaminhoLink());
+                                    it.putExtras(bundle);
+                                    startActivity(it);
+                                }
+                                else if (pontos.get(i).getTipo() == IMPORTARAUDIO) {
                                     Log.i("IMAGEM::::::::::", pontos.get(i).getCaminhoLink());
                                     Intent it = new Intent(c, PlayAudio.class);
 

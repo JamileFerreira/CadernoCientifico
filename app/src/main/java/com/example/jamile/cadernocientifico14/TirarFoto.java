@@ -6,8 +6,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
-public class AbrirCamera extends AppCompatActivity {
+public class TirarFoto extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,12 +19,12 @@ public class AbrirCamera extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(data!=null){
+        if (data != null) {
             Bundle bundle = data.getExtras();
-            if(bundle != null){
-            //if (resultCode == RESULT_OK && requestCode == 2) {
+            if (bundle != null) {
+                //if (resultCode == RESULT_OK && requestCode == 2) {
                 Uri selectedImage = data.getData();
                 String[] filePath = {MediaStore.Images.Media.DATA};
                 Cursor c = getContentResolver().query(selectedImage, filePath, null, null, null);
@@ -33,22 +34,15 @@ public class AbrirCamera extends AppCompatActivity {
                 c.close();
 //                Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
 //                // imagem.setImageBitmap(thumbnail);
-                Intent intent2=new Intent(this, MainActivity.class);
-                Bundle bundle2 = new Bundle();
-                //String ident="Inicio";
-                bundle2.putString("DEUS", picturePath);
-                // bundle.putString("Inicio", ident);
-                intent2.putExtras(bundle2);
-                startActivity(intent2);
+                Intent returnIntent = new Intent();
+                Log.i("TESTE 22222::::::::::", picturePath);
+                returnIntent.putExtra("resultado", picturePath);
+                setResult(RESULT_OK, returnIntent);
                 finish();
             }
-            else{
-                finish();
-            }
-        //}
         }
-
-
-
+        else{
+            finish();
+        }
     }
 }

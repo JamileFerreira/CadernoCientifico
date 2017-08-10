@@ -78,6 +78,9 @@ public class AbrirGaleria extends AppCompatActivity {
 //
 //            startActivity(intent2);
         }
+        else{
+            finish();
+        }
     }
     /////////////////////////
 

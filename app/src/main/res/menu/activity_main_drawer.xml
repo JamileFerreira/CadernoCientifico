@@ -8,7 +8,11 @@
         <item
             android:id="@+id/itemAUDIO"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="AUDIO" />
+            android:title="GRAVAR ÁUDIO" />
+        <item
+            android:id="@+id/itemImportarAUDIO"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="IMPORTAR ÁUDIO" />
         <item
             android:id="@+id/itemTEXTO"
             android:icon="@drawable/ic_menu_slideshow"
@@ -18,13 +22,17 @@
             android:icon="@drawable/ic_menu_manage"
             android:title="LINK" />
         <item
+            android:id="@+id/itemCAMERA"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="CÂMERA" />
+        <item
             android:id="@+id/itemIMAGEM"
             android:icon="@drawable/ic_menu_manage"
             android:title="IMAGEM" />
-        <item
+      <!--  <item
             android:id="@+id/itemVIDEO"
             android:icon="@drawable/ic_menu_manage"
-            android:title="VIDEO" />
+            android:title="VIDEO" />-->
     </group>
 
 
