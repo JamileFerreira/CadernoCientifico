@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.Random;
 
 public class GravarAudio extends Activity {
     Button play, stop, record2;
@@ -27,11 +28,14 @@ public class GravarAudio extends Activity {
     TextView parar;
     //static View view;
     int volta=0;
+    Random random;
+    String RandomAudioFileName = "ABCDEFGHIJKLMNOP";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gravar_audio);
+        random = new Random();
         parar = (TextView) findViewById(R.id.parar);
         //play=(Button)findViewById(R.id.button3);
         //stop=(Button)findViewById(R.id.button2);
@@ -42,7 +46,7 @@ public class GravarAudio extends Activity {
 //        ch.setVisibility(GONE);
         //stop.setEnabled(false);
         //play.setEnabled(false);
-        outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
+        outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + CreateRandomAudioFileName(5) + "AudioRecording.3gp";
         //view.setVisibility(GONE);
 
 
@@ -102,6 +106,23 @@ public class GravarAudio extends Activity {
                 Log.i("AAAA1111", String.valueOf(apertei));
             }
         });
-        //return view;
+        //
+
+
+
+    }
+    public String CreateRandomAudioFileName(int string) {
+
+        StringBuilder stringBuilder = new StringBuilder(string);
+
+        int i = 0;
+        while (i < string) {
+
+            stringBuilder.append(RandomAudioFileName.charAt(random.nextInt(RandomAudioFileName.length())));
+
+            i++;
+        }
+        return stringBuilder.toString();
+
     }
 }

@@ -10,14 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@drawable/capa1"
     tools:context="com.example.jamile.cadernocientifico14.Inicio">
-    <Button
-        android:text="GALERIA"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
-        android:id="@+id/btimg"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
 
     <ImageView
         android:layout_width="150dp"
@@ -26,5 +18,24 @@
         android:id="@+id/img"
         android:visibility="gone"
          />
+
+    <Button
+        android:text="CAMERA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btcam"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/btimg"
+        android:layout_alignStart="@+id/btimg"
+        android:layout_marginBottom="200dp" />
+
+    <Button
+        android:text="GALERIA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btimg"
+        android:layout_above="@+id/btcam"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="86dp" />
 
 </RelativeLayout>

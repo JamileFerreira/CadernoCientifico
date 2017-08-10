@@ -2,9 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.jamile.cadernocientifico14">
 
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="18" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <permission android:name="android.permission.CAMERA" />
+
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
@@ -43,7 +51,9 @@
         <activity android:name=".AbrirImagem" />
         <activity android:name=".PlayAudio" />
         <activity android:name=".EscreverTexto" />
-        <activity android:name=".ExibirTexto"></activity>
+        <activity android:name=".ExibirTexto" />
+        <activity android:name=".AbrirGaleria" />
+        <activity android:name=".AbrirCamera"></activity>
     </application>
 
 </manifest>
