@@ -9,10 +9,30 @@ import android.graphics.Paint;
 public class Ponto {
 
     private String caminhoLink;
-    private int possicaoX;
-    private int possicaoY;
+    private float possicaoX;
+    private float possicaoY;
     private int tipo;
     private Paint paint;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    private int id;
+
+    public int getNumPagina() {
+        return numPagina;
+    }
+
+    public void setNumPagina(int numPagina) {
+        this.numPagina = numPagina;
+    }
+
+    private int numPagina;
 
     public Paint getPaint() {
         return paint;
@@ -22,19 +42,19 @@ public class Ponto {
         this.paint = paint;
     }
 
-    public int getPossicaoX() {
+    public float getPossicaoX() {
         return possicaoX;
     }
 
-    public void setPossicaoX(int possicaoX) {
+    public void setPossicaoX(float possicaoX) {
         this.possicaoX = possicaoX;
     }
 
-    public int getPossicaoY() {
+    public float getPossicaoY() {
         return possicaoY;
     }
 
-    public void setPossicaoY(int possicaoY) {
+    public void setPossicaoY(float possicaoY) {
         this.possicaoY = possicaoY;
     }
 

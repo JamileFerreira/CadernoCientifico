@@ -36,6 +36,6 @@
         android:id="@+id/btimg"
         android:layout_above="@+id/btcam"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="86dp" />
+        android:layout_marginBottom="42dp" />
 
 </RelativeLayout>

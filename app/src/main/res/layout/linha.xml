@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/fundo"
+        android:scaleType="fitXY"
+        android:layout_margin="5dp"
+        android:layout_width="100dp"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:text="AA/BB/CCCC"
+        android:id="@+id/data"
+        android:layout_marginTop="10dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Title"
+        android:layout_height="40dp"
+        android:layout_width="130dp" />
+
+    <TextView
+        android:layout_width="50dp"
+        android:text=""
+        android:id="@+id/numPagina"
+        android:layout_marginTop="10dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Title"
+        android:layout_height="40dp" />
+
+
+</LinearLayout>

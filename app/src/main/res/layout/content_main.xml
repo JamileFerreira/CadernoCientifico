@@ -15,14 +15,4 @@
 
     tools:context="com.example.jamile.cadernocientifico14.MainActivity">
 
-    <fragment
-        android:name="com.example.jamile.cadernocientifico14.EmBrancoFragment"
-        android:id="@+id/fragmentB"
-        tools:layout="@layout/fragment_em_branco"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="132dp"
-        />
 </RelativeLayout>

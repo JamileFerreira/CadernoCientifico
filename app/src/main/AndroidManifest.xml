@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Inicio"
+            android:name=".CadernoCientifico"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -56,7 +56,9 @@
         <activity android:name=".AbrirCamera" />
         <activity android:name=".ImportarAudio" />
         <activity android:name=".TirarFoto" />
-        <activity android:name=".PlayVideo"></activity>
+        <activity android:name=".PlayVideo" />
+        <activity android:name=".Inicio" />
+        <activity android:name=".AtualizaPagina"></activity>
     </application>
 
 </manifest>

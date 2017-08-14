@@ -16,7 +16,9 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -37,6 +39,7 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -75,25 +78,36 @@ public class MainActivity extends AppCompatActivity
     static final int ACTIVITY_IMPORTARAUDIO=6;
     static final int ACTIVITY_CAMERA = 7;
     static String picturePath;
+    static int NUMPAGINA=0;
+
+   // private CadernoCientificoBD bd;
+    private PaginaBD paginaBD;
+    private PontoBD pontoBD;
+    ArrayList<Pagina> listaPagina;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
-
+    Pagina pagina;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Fragment f = (Fragment)findViewById(R.id.fragmentB);
         //EmBrancoFragment.view.setVisibility(GONE);
+        //bd = new CadernoCientificoBD(this);
+        paginaBD=new PaginaBD(this);
+        pagina=new Pagina();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
         Intent intent2 = getIntent();
         Bundle bundle = intent2.getExtras();
         picturePath = bundle.getString("DEUS");
-
+        Log.i("CAMINHOOOO1", picturePath);
+        pagina.setCaminhoBackground(picturePath);
         thumbnail = (BitmapFactory.decodeFile(picturePath));
         ImageView image = (ImageView) findViewById(R.id.img22);
         //Intent intent2 = getIntent();
@@ -104,21 +118,14 @@ public class MainActivity extends AppCompatActivity
 
         mover = new MoverView(this);
         // mover.criarPonto(PDF);
-        Log.i("CAMINHOOOO1", String.valueOf(CaminhoLink));
+        //Log.i("CAMINHOOOO1", String.valueOf(CaminhoLink));
         view = findViewById(R.id.view_root2);
 
         final LinearLayout screenlayout = (LinearLayout) findViewById(R.id.view_root2);
         screenlayout.addView(mover);
         view.setBackground(image.getDrawable());
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -147,16 +154,6 @@ public class MainActivity extends AppCompatActivity
                 .setObject(object)
                 .setActionStatus(Action.STATUS_TYPE_COMPLETED)
                 .build();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        AppIndex.AppIndexApi.start(client, getIndexApiAction());
     }
 
     @Override
@@ -267,6 +264,7 @@ public class MainActivity extends AppCompatActivity
             Intent i = new Intent(this, TirarFoto.class);
             startActivityForResult(i, ACTIVITY_CAMERA);
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -444,7 +442,7 @@ public class MainActivity extends AppCompatActivity
         String txt = "Mueve Algun circulo";
         Drawable imagen;
         Ponto ponto;
-        Vector<Ponto> pontos = new Vector<Ponto>();
+        //Vector<Ponto> pontos = new Vector<Ponto>();
         Context c;
 
         public MoverView(Context context) {
@@ -582,13 +580,20 @@ public class MainActivity extends AppCompatActivity
         }
 
         protected void onDraw(Canvas canvas) {
+            //pagina.setPontos(pontos);
+            //Log.i("TIPO44444::::::::::", String.valueOf(pagina.getPontos().size()));
+            //pagina.setPontos(pontos);
+
             canvas.drawColor(Color.argb(0, 0, 0, 0));
             canvas.drawColor(Color.TRANSPARENT);
+
             for (int i = 0; i < pontos.size(); i++) {
                 //if(pon){}
                 //canvas.drawBitmap(bipmap,10,10,null);
                 //canvas.drawBitmap(bipmap2,100,100, null);
                 canvas.drawCircle(x.get(i), y.get(i), RADIO, pontos.get(i).getPaint());
+                pontos.get(i).setPossicaoX(x.get(i));
+                pontos.get(i).setPossicaoY(y.get(i));
             }
         }
 
@@ -762,5 +767,46 @@ public class MainActivity extends AppCompatActivity
         bitmap.recycle();
 
         return output;
+    }
+    //
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+
+                paginaBD=new PaginaBD(MainActivity.this);
+                paginaBD.addPagina(pagina);
+
+               // if(paginaBD.getPaginnaIdMax()!=null){
+                    paginaBD=new PaginaBD(MainActivity.this);
+                    NUMPAGINA= paginaBD.getPaginnaIdMax().getNumPagina();
+               // }
+               // else{NUMPAGINA=1;}
+                //fazer uma condiçao para que pegue a ultima página inserida pegar o maior ID
+                if(pontos.size()>0){
+                    Log.i("TIPO IFIFIF::::::::::", String.valueOf(pontos.size()));
+                    //Log.i("TIPO2222::::::::::", ponto.getCaminhoLink());
+                    for(int i=0; i<pontos.size();i++) {
+                        pontoBD=new PontoBD(MainActivity.this);
+                        pontos.get(i).setNumPagina(NUMPAGINA);
+                        Log.i("Caminho A::::::::::", String.valueOf(pagina.getNumPagina()));
+                        Log.i("Caminho IFIFIF::::::::::", String.valueOf(pontos.size()));
+                        pontoBD.addPonto(pontos.get(i));
+                    }
+                }
+                else{
+                    Log.i("TIPO ELSEELSE::::::::::", String.valueOf(pontos.size()));
+                }
+            }
+        });
+
+
+
+
     }
 }
