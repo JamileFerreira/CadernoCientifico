@@ -58,7 +58,9 @@
         <activity android:name=".TirarFoto" />
         <activity android:name=".PlayVideo" />
         <activity android:name=".Inicio" />
-        <activity android:name=".AtualizaPagina"></activity>
+        <activity android:name=".AtualizaPagina" />
+        <activity android:name=".ModificaPagina" />
+        <activity android:name=".ExcluirPagina"></activity>
     </application>
 
 </manifest>

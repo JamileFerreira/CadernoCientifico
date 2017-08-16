@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity
     static final int ACTIVITY_CAMERA = 7;
     static String picturePath;
     static int NUMPAGINA=0;
+    Ponto ultimoClicado;
 
    // private CadernoCientificoBD bd;
     private PaginaBD paginaBD;
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity
         pagina=new Pagina();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar);
         Intent intent2 = getIntent();
         Bundle bundle = intent2.getExtras();
         picturePath = bundle.getString("DEUS");
@@ -131,7 +132,7 @@ public class MainActivity extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        //toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -198,6 +199,15 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Intent intent=new Intent(MainActivity.this, CadernoCientifico.class);
+        startActivity(intent);
+        finish();
+    }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -264,6 +274,11 @@ public class MainActivity extends AppCompatActivity
             Intent i = new Intent(this, TirarFoto.class);
             startActivityForResult(i, ACTIVITY_CAMERA);
         }
+        else if (id == R.id.excluirPonto) {
+//            Intent i = new Intent(this, TirarFoto.class);
+//            startActivityForResult(i, ACTIVITY_CAMERA);
+        }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -591,6 +606,7 @@ public class MainActivity extends AppCompatActivity
                 //if(pon){}
                 //canvas.drawBitmap(bipmap,10,10,null);
                 //canvas.drawBitmap(bipmap2,100,100, null);
+                //erro também
                 canvas.drawCircle(x.get(i), y.get(i), RADIO, pontos.get(i).getPaint());
                 pontos.get(i).setPossicaoX(x.get(i));
                 pontos.get(i).setPossicaoY(y.get(i));
@@ -776,7 +792,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Página Salva!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
                 paginaBD=new PaginaBD(MainActivity.this);
@@ -804,9 +820,5 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-
-
-
-
     }
 }

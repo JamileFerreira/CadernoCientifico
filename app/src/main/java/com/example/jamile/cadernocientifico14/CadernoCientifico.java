@@ -44,7 +44,7 @@ public class CadernoCientifico extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Intent intent = new Intent(CadernoCientifico.this, AtualizaPagina.class);
+                Intent intent = new Intent(CadernoCientifico.this, ModificaPagina.class);
                 intent.putExtra("numPagina", listaPagina.get(position).getNumPagina());
                 startActivity(intent);
             }

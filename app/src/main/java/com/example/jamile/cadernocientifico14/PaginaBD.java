@@ -97,7 +97,7 @@ public class PaginaBD {
     }
 
 
-    public int deleteLivro(Pagina pagina) {
+    public int deletePagina(Pagina pagina) {
         int i = bd.delete(TABELA_PAGINA, //tabela
                 NUMPAGINA+" = ?", // colunas para comparar
                 new String[] { String.valueOf(pagina.getNumPagina()) });

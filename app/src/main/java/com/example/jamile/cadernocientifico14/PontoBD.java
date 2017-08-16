@@ -53,9 +53,9 @@ public class PontoBD {
         ContentValues values = new ContentValues();
         values.put(POSICAOX, ponto.getPossicaoX());
         values.put(POSICAOY,ponto.getPossicaoY());
-        values.put(TIPO, ponto.getTipo());
-        values.put(CAMINHOLINK, ponto.getCaminhoLink());
-        values.put(NUMPAGINA, ponto.getNumPagina());
+        //values.put(TIPO, ponto.getTipo());
+        //values.put(CAMINHOLINK, ponto.getCaminhoLink());
+        //values.put(NUMPAGINA, ponto.getNumPagina());
         int i = bd.update(TABELA_PONTO, //tabela
                 values, // valores
                 ID_PONTO+" = ?", // colunas para comparar
@@ -92,7 +92,7 @@ public class PontoBD {
         return listaPonto;
     }
 
-    public int deleteLivro(Ponto ponto) {
+    public int deletePonto(Ponto ponto) {
         int i = bd.delete(TABELA_PONTO, //tabela
                 ID_PONTO+" = ?", // colunas para comparar
                 new String[] { String.valueOf(ponto.getId()) });

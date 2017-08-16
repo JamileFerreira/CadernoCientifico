@@ -29,6 +29,7 @@
             android:id="@+id/itemIMAGEM"
             android:icon="@drawable/ic_menu_manage"
             android:title="IMAGEM" />
+
       <!--  <item
             android:id="@+id/itemVIDEO"
             android:icon="@drawable/ic_menu_manage"
@@ -36,17 +37,17 @@
     </group>
 
 
-    <!--<item android:title="Communicate">
+    <item android:title="">
         <menu>
-            <item
+            <!--<item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="IMAGEM" />
+                android:title="IMAGEM" />-->
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/excluirPonto"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="EXCLUIR PONTO" />
         </menu>
-    </item>-->
+    </item>
 
 </menu>

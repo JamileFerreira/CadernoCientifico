@@ -14,6 +14,9 @@ public class Ponto {
     private int tipo;
     private Paint paint;
 
+    public Ponto(){
+        this.id=0;
+    }
     public int getId() {
         return id;
     }
